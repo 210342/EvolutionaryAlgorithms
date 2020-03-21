@@ -6,24 +6,34 @@ using System.Linq;
 
 namespace Evo.ParticleSwarm
 {
-    public class Particle : Organism<Particle>
+    public sealed class Particle : Organism<Particle>
     {
+        private readonly SwarmUniverse _universe;
         private double[] bestPosition;
 
-        public double[] Position { get; private set; }
         public double[] Velocity { get; private set; }
+        public double[] Position { get; private set; }
         public double Value { get; private set; }
+
         public double BestValue { get; private set; }
         public double[] BestPosition
         {
             get => bestPosition;
             private set => value.CopyTo(BestPosition.AsSpan());
         }
-        public double ChangeParameter { get; private set; }
+
+        public double ChangeRate { get; private set; }
+        public double VelocityRate { get; private set; }
+
 
         #region Initialisation
 
-        internal Particle(IUniverse<IPopulation<Particle>, Particle> universe) : base(universe) { }
+        internal Particle(IUniverse<IPopulation<Particle>, Particle> universe) : base(universe) 
+        {
+            _universe = universe as SwarmUniverse;
+            ChangeRate = _universe.Parameters.ParticleChangeRate;
+            VelocityRate = _universe.Parameters.VelocityRate;
+        }
 
         protected override void InitialiseRandomly(IUniverse<IPopulation<Particle>, Particle> universe)
         {
@@ -33,7 +43,6 @@ namespace Evo.ParticleSwarm
             BestValue = Value;
             bestPosition = new double[universe.Size.Length];
             BestPosition = Position;
-            ChangeParameter = universe is SwarmUniverse _universe ? _universe.ParticleChangeParameter : 1.0;
         }
 
         #endregion
@@ -65,19 +74,27 @@ namespace Evo.ParticleSwarm
             }
 
             // update velocity
-            double[] particleChange = swarm.Universe.GenerateRandomVector(ChangeParameter);
-            double[] swarmChange = swarm.Universe.GenerateRandomVector(swarm.ChangeParameter);
+            double[] cognitive = swarm.Universe.GenerateRandomVector(ChangeRate);
+            double[] social = swarm.Universe.GenerateRandomVector(swarm.ChangeRate);
             for (int i = 0; i < Velocity.Length; ++i)
             {
-                Velocity[i] += particleChange[i] * (BestPosition[i] - Position[i])
-                    + swarmChange[i] * (swarm.BestPosition[i] - Position[i]);
+                Velocity[i] = Velocity[i] * VelocityRate 
+                    + cognitive[i] * (BestPosition[i] - Position[i])
+                    + social[i] * (swarm.BestPosition[i] - Position[i]);
             }
 
-            // update possition
+            // update position
             for (int i = 0; i < Position.Length; ++i)
             {
-                Position[i] += Velocity[i];
+                Position[i] = Math.Min(
+                    Math.Max(
+                        Position[i] + Velocity[i], 
+                        _universe.Size[i].Min
+                    ), 
+                    _universe.Size[i].Max
+                );
             }
+            ChangeRate *= _universe.Parameters.DecelerationRate;
             return this;
         }
 

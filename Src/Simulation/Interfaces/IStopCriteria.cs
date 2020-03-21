@@ -4,8 +4,5 @@ using System.Text;
 
 namespace Evo.Simulation.Interfaces
 {
-    public interface IStopCriteria
-    {
-        
-    }
+
 }

@@ -8,6 +8,9 @@ namespace Evo.Simulation.Interfaces
         where OrganismType : IOrganism<OrganismType, IPopulation<OrganismType>>
     {
         IUniverse<IPopulation<OrganismType>, OrganismType> Universe { get; }
+        uint Epoch { get; }
+        object Result { get; }
+
         void Evolve();
     }
 }

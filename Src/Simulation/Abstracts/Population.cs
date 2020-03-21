@@ -13,6 +13,10 @@ namespace Evo.Simulation.Abstracts
         public OrganismType[] Organisms { get; }
         public int PopulationSize => Organisms.Length;
 
+        public uint Epoch { get; protected set; } = 0;
+
+        public abstract object Result { get; }
+
         public Population(IUniverse<IPopulation<OrganismType>, OrganismType> universe, IEnumerable<OrganismType> organisms)
         {
             Universe = universe;
@@ -21,10 +25,7 @@ namespace Evo.Simulation.Abstracts
 
         public virtual void Evolve()
         {
-            for (int i = 0; i < Organisms.Length; ++i)
-            {
-                Organisms[i] = Organisms[i].Evolve(this);
-            }
+            ++Epoch;
         }
     }
 }

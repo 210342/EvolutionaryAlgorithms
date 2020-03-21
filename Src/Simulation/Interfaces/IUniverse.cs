@@ -10,17 +10,22 @@ namespace Evo.Simulation.Interfaces
         where OrganismType : IOrganism<OrganismType, IPopulation<OrganismType>>
     {
         Random RNG { get; }
-        double[] Size { get; }
-        Func<IEnumerable<double>, double> ApproximatedFunction { get; }
+        Range[] Size { get; }
+        Func<double[], double> ApproximatedFunction { get; }
         Func<double, double, bool> FitnessFunction { get; }
         PopulationType Population { get; }
+        uint Epoch => Population.Epoch;
 
         double[] GenerateRandomVector() => Enumerable.Range(0, Size.Length)
-            .Select(i => RNG.NextDouble() * Size[i])
+            .Select(i => 0.5 * (RNG.NextDouble() * (Size[i].Max - Size[i].Min) + Size[i].Min))
             .ToArray();
 
         double[] GenerateRandomVector(double maxValue) => Enumerable.Range(0, Size.Length)
             .Select(i => RNG.NextDouble() * maxValue)
+            .ToArray();
+
+        double[] GenerateRandomVector(double minValue, double maxValue) => Enumerable.Range(0, Size.Length)
+            .Select(i => RNG.NextDouble() * (maxValue - minValue) + minValue)
             .ToArray();
     }
 }

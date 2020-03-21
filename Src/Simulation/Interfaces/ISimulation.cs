@@ -4,9 +4,12 @@ using System.Text;
 
 namespace Evo.Simulation.Interfaces
 {
-    interface ISimulation<OrganismType> 
+    public interface ISimulation<OrganismType>
         where OrganismType : IOrganism<OrganismType, IPopulation<OrganismType>>
     {
-        IResult Run(IUniverse<IPopulation<OrganismType>, OrganismType> universe, Predicate<IStopCriteria> stopCondition);
+        object Run(
+            IUniverse<IPopulation<OrganismType>, OrganismType> universe, 
+            Predicate<IUniverse<IPopulation<OrganismType>, OrganismType>> stopCondition
+        );
     }
 }

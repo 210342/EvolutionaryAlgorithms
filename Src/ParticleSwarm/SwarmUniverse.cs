@@ -6,32 +6,29 @@ using System.Text;
 
 namespace Evo.ParticleSwarm
 {
-    class SwarmUniverse : IUniverse<IPopulation<Particle>, Particle>
+    public class SwarmUniverse : IUniverse<IPopulation<Particle>, Particle>
     {
         public Random RNG { get; } = new Random();
-        public double[] Size { get; }
-        public Func<IEnumerable<double>, double> ApproximatedFunction { get; }
-        public Func<double, double, bool> FitnessFunction 
-            => new Func<double, double, bool>((left, right) => left < right);
+        public Simulation.Range[] Size { get; }
+        public Func<double[], double> ApproximatedFunction { get; }
+        public Func<double, double, bool> FitnessFunction { get; } =
+            new Func<double, double, bool>((left, right) => left < right);
 
-        public double ParticleChangeParameter { get; }
-        public double SwarmChangeParameter { get; }
+        public SwarmParameters Parameters { get; }
         public IPopulation<Particle> Population => Swarm;
         public Swarm Swarm { get; }
 
         public SwarmUniverse(
-            double[] size, 
-            Func<IEnumerable<double>, double> approximatedFunction,
-            double particleChangeParameter,
-            double swarmChangeParameter,
-            int populationSize
+            SwarmParameters swarmParameters,
+            Func<double[], double> approximatedFunction,
+            Func<double, double, bool> fitnessFunction
             )
         {
-            Size = size;
+            Parameters = swarmParameters;
+            Size = swarmParameters.UniverseSize;
+            FitnessFunction = fitnessFunction;
             ApproximatedFunction = approximatedFunction;
-            ParticleChangeParameter = particleChangeParameter;
-            SwarmChangeParameter = swarmChangeParameter;
-            Swarm = new Swarm(this, populationSize);
+            Swarm = new Swarm(this, swarmParameters.PopulationSize);
         }
     }
 }
