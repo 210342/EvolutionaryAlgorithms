@@ -23,7 +23,8 @@ namespace Evo.ParticleSwarm
         }
 
         public double ChangeRate { get; private set; }
-        public double VelocityRate { get; private set; }
+        public double InertiaWeight { get; private set; }
+        public double InertiaWeightRate { get; }
 
 
         #region Initialisation
@@ -32,7 +33,8 @@ namespace Evo.ParticleSwarm
         {
             _universe = universe as SwarmUniverse;
             ChangeRate = _universe.Parameters.ParticleChangeRate;
-            VelocityRate = _universe.Parameters.VelocityRate;
+            InertiaWeight = _universe.Parameters.InertiaWeight;
+            InertiaWeightRate = _universe.Parameters.InertiaWeightRate;
         }
 
         protected override void InitialiseRandomly(IUniverse<IPopulation<Particle>, Particle> universe)
@@ -78,7 +80,7 @@ namespace Evo.ParticleSwarm
             double[] social = swarm.Universe.GenerateRandomVector(swarm.ChangeRate);
             for (int i = 0; i < Velocity.Length; ++i)
             {
-                Velocity[i] = Velocity[i] * VelocityRate 
+                Velocity[i] = Velocity[i] * InertiaWeight
                     + cognitive[i] * (BestPosition[i] - Position[i])
                     + social[i] * (swarm.BestPosition[i] - Position[i]);
             }
@@ -94,6 +96,7 @@ namespace Evo.ParticleSwarm
                     _universe.Size[i].Max
                 );
             }
+            InertiaWeight *= InertiaWeightRate;
             ChangeRate *= _universe.Parameters.DecelerationRate;
             return this;
         }

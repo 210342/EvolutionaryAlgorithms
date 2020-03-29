@@ -10,6 +10,7 @@ namespace Evo.ParticleSwarm
         public double ParticleChangeRate { get; set; }
         public double SwarmChangeRate { get; set; }
         public double DecelerationRate { get; set; }
-        public double VelocityRate { get; set; }
+        public double InertiaWeight { get; set; }
+        public double InertiaWeightRate { get; set; }
     }
 }

@@ -2,16 +2,18 @@
 using Evo.Simulation.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Evo.ParticleSwarm
 {
     public class SwarmExperiment : Experiment<Particle, IPopulation<Particle>, SwarmConfig>
     {
-        public override IEnumerable<(object, InputParameters)> Run(SwarmConfig config)
+        public override async Task Run(SwarmConfig config, StreamWriter output)
         {
-            IList <(object, InputParameters)> results = new List<(object, InputParameters)>();
-            for (int i = 0; i < Functions.Length; ++i)
+            for (int functionIndex = 0; functionIndex < Functions.Length; ++functionIndex)
             {
                 for (uint populationSize = config.SwarmParameters.PopulationSize; 
                     populationSize <= config.ExperimentParameters.MaxPopulation; 
@@ -33,26 +35,38 @@ namespace Evo.ParticleSwarm
                                 decelerationRate <= config.ExperimentParameters.MaxDecelerationRate;
                                 decelerationRate += config.ExperimentParameters.DecelerationRate)
                                 {
-                                    for (double velocityRate = config.SwarmParameters.VelocityRate;
-                                    velocityRate <= config.ExperimentParameters.MaxVelocityRate;
-                                    velocityRate += config.ExperimentParameters.VelocityRate)
+                                    for (double inertiaWeight = config.SwarmParameters.InertiaWeight;
+                                    inertiaWeight <= config.ExperimentParameters.MaxInertiaWeight;
+                                    inertiaWeight += config.ExperimentParameters.InertiaWeight)
                                     {
-                                        SwarmParameters currentParams = new SwarmParameters()
+                                        for (double inertiaWeightRate = config.SwarmParameters.InertiaWeightRate;
+                                        inertiaWeightRate <= config.ExperimentParameters.MaxInertiaWeightRate;
+                                        inertiaWeightRate += config.ExperimentParameters.InertiaWeightRate)
                                         {
-                                            UniverseSize = config.SwarmParameters.UniverseSize,
-                                            StopCondition = config.SwarmParameters.StopCondition,
-                                            PopulationSize = populationSize,
-                                            MaxEpoch = maxEpoch,
-                                            ParticleChangeRate = particleChangeRate,
-                                            SwarmChangeRate = swarmChangeRate,
-                                            DecelerationRate = decelerationRate,
-                                            VelocityRate = velocityRate
-                                        };
-                                        object result = new Simulation<Particle>().Run(
-                                            new SwarmUniverse(currentParams, Functions[i]),
-                                            StopConditions[currentParams.StopCondition]
-                                        );
-                                        results.Add((result, currentParams));
+                                            Function function = Functions[functionIndex];
+                                            SwarmParameters currentParams = new SwarmParameters()
+                                            {
+                                                StopCondition = config.SwarmParameters.StopCondition,
+                                                PopulationSize = populationSize,
+                                                MaxEpoch = maxEpoch,
+                                                ParticleChangeRate = particleChangeRate,
+                                                SwarmChangeRate = swarmChangeRate,
+                                                DecelerationRate = decelerationRate,
+                                                InertiaWeight = inertiaWeight,
+                                                InertiaWeightRate = config.SwarmParameters.InertiaWeightRate
+                                            };
+                                            await Task.Run(async () => {
+                                                Stopwatch timer = new Stopwatch();
+                                                timer.Start();
+                                                object result = new Simulation<Particle>().Run(
+                                                    new SwarmUniverse(currentParams, function.UniverseSize, (function.Evaluate, function.Fitness)),
+                                                    StopConditions[currentParams.StopCondition]
+                                                );
+                                                timer.Stop();
+                                                double[] resultPosition = result as double[];
+                                                await output.WriteLineAsync($"{functionIndex};{populationSize};{maxEpoch};{particleChangeRate};{swarmChangeRate};{decelerationRate};{inertiaWeight};{inertiaWeightRate};{timer.ElapsedMilliseconds};{config.SwarmParameters.StopCondition};[{string.Join(",", resultPosition)}];{function.ExpectedValue - function.Evaluate(resultPosition)}");
+                                            });
+                                        }
                                     }
                                 }
                             }
@@ -60,7 +74,6 @@ namespace Evo.ParticleSwarm
                     }
                 }
             }
-            return results;
         }
     }
 }

@@ -4,12 +4,13 @@ using Evo.Simulation.Interfaces;
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Evo.EvoApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             string filename = "SwarmInput.json";
             if (args.Length > 0)
@@ -23,18 +24,16 @@ namespace Evo.EvoApp
             {
                 return;
             }
-            /*
-                        IUniverse<IPopulation<Particle>, Particle> universe = new SwarmUniverse(
-                            config.SwarmParameters,
-                            (x => (x[0] * x[0]) + (x[1] * x[1]),
-                            (y1, y2) => y1 < y2)
-                        );
-                        object result = new Simulation<Particle>().Run(
-                            universe,
-                            universe => universe.Epoch >= config.SwarmParameters.MaxEpoch
-                        );*/
 
-            var results = new SwarmExperiment().Run(config);
+
+            using (FileStream stream = new FileStream("Results.csv", FileMode.Create))
+            {
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    writer.WriteLine("FunctionIndex;PopulationSize;MaxEpochs;ParticleChangeRate;SwarmChangeRate;DecelerationRate;InertiaWeight;InertiaWeightRate;Time;StopCondition;Result;Error");
+                    await new SwarmExperiment().Run(config, writer);
+                }
+            }
         }
     }
 }

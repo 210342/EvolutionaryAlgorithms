@@ -10,8 +10,20 @@ namespace Evo.ParticleSwarm
     public sealed class Swarm : Population<Particle>
     {
         private readonly double[] _bestPosition;
+        private double _bestValue;
 
-        public double BestValue { get; set; }
+        public double BestValue
+        {
+            get => _bestValue;
+            set
+            {
+                PreviousBestValue = _bestValue;
+                _bestValue = value;
+            }
+        }
+        public double PreviousBestValue { get; private set; }
+        public bool BestValueChanged { get; private set; } = false;
+
         public double[] BestPosition { get => _bestPosition; set => value.CopyTo(_bestPosition.AsSpan()); }
         public double ChangeRate { get; private set; }
         internal SwarmUniverse SwarmUniverse => Universe as SwarmUniverse;
@@ -34,6 +46,7 @@ namespace Evo.ParticleSwarm
                 Organisms[i] = Organisms[i].Evolve(this);
             }
             ChangeRate *= SwarmUniverse.Parameters.DecelerationRate;
+            BestValueChanged = BestValue != PreviousBestValue;
         }
     }
 }
