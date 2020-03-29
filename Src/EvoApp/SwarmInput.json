@@ -1,0 +1,36 @@
+﻿{
+  "SwarmParameters": {
+    "ParametersName": "Pop=128, epochs=128, part=1, swarm=1, decel=0.9, veloc=0.75, func=1",
+    "UniverseSize": [
+      {
+        "Min": -50.0,
+        "Max": 50.0
+      },
+      {
+        "Min": -50.0,
+        "Max": 50.0
+      }
+    ],
+    "PopulationSize": 32,
+    "MaxEpoch": 32,
+    "StopCondition": "Iterations",
+    "ParticleChangeRate": 0.1,
+    "SwarmChangeRate": 0.1,
+    "DecelerationRate": 0.3,
+    "VelocityRate": 0.3
+  },
+  "ExperimentParameters": {
+    "EpochRate": 32,
+    "PopulationRate": 32,
+    "ParticleChangeRate": 0.1,
+    "SwarmChangeRate": 0.1,
+    "DecelerationRate": 0.5,
+    "VelocityRate": 0.5,
+    "MaxEpoch": 512,
+    "MaxPopulation": 512,
+    "MaxParticleChangeRate": 4.0,
+    "MaxSwarmChangeRate": 4.0,
+    "MaxDecelerationRate": 1.0,
+    "MaxVelocityRate": 1.0
+  }
+}

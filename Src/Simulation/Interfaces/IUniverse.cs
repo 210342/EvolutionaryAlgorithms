@@ -14,7 +14,8 @@ namespace Evo.Simulation.Interfaces
         Func<double[], double> ApproximatedFunction { get; }
         Func<double, double, bool> FitnessFunction { get; }
         PopulationType Population { get; }
-        uint Epoch => Population.Epoch;
+        uint Epoch { get; }
+        uint MaxEpoch { get; }
 
         double[] GenerateRandomVector() => Enumerable.Range(0, Size.Length)
             .Select(i => 0.5 * (RNG.NextDouble() * (Size[i].Max - Size[i].Min) + Size[i].Min))

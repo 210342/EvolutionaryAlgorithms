@@ -8,8 +8,8 @@ namespace Evo.Simulation.Interfaces
         where OrganismType : IOrganism<OrganismType, IPopulation<OrganismType>>
     {
         object Run(
-            IUniverse<IPopulation<OrganismType>, OrganismType> universe, 
-            Predicate<IUniverse<IPopulation<OrganismType>, OrganismType>> stopCondition
+            IUniverse<IPopulation<OrganismType>, OrganismType> universe,
+            Func<IUniverse<IPopulation<OrganismType>, OrganismType>, bool> stopCondition
         );
     }
 }

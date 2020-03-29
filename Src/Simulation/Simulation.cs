@@ -9,8 +9,8 @@ namespace Evo.Simulation
         where OrganismType : IOrganism<OrganismType, IPopulation<OrganismType>>
     {
         public object Run(
-            IUniverse<IPopulation<OrganismType>, OrganismType> universe, 
-            Predicate<IUniverse<IPopulation<OrganismType>, OrganismType>> stopCondition)
+            IUniverse<IPopulation<OrganismType>, OrganismType> universe,
+            Func<IUniverse<IPopulation<OrganismType>, OrganismType>, bool> stopCondition)
         {
             while (!stopCondition(universe))
             {

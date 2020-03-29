@@ -17,8 +17,8 @@ namespace Evo.ParticleSwarm
         internal SwarmUniverse SwarmUniverse => Universe as SwarmUniverse;
         public override object Result => BestPosition;
 
-        internal Swarm(IUniverse<IPopulation<Particle>, Particle> universe, int populationSize) :
-            base(universe, Enumerable.Range(0, populationSize).Select(i => new Particle(universe)))
+        internal Swarm(IUniverse<IPopulation<Particle>, Particle> universe, uint populationSize) :
+            base(universe, Enumerable.Range(0, (int)populationSize).Select(i => new Particle(universe)))
         {
             Particle best = Organisms.Aggregate((p1, p2) => universe.FitnessFunction(p1.BestValue, p2.BestValue) ? p1 : p2);
             _bestPosition = best.BestPosition.Clone() as double[];

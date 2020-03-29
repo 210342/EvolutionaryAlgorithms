@@ -7,8 +7,8 @@ namespace Evo.Simulation
     public class InputParameters
     {
         public Range[] UniverseSize { get; set; }
-        public int MaxEpoch { get; set; }
-        public int PopulationSize { get; set; }
+        public uint MaxEpoch { get; set; }
+        public uint PopulationSize { get; set; }
         public string StopCondition { get; set; }
     }
 }

@@ -11,28 +11,30 @@ namespace Evo.EvoApp
     {
         static void Main(string[] args)
         {
-            string filename = "Input.json";
+            string filename = "SwarmInput.json";
             if (args.Length > 0)
             {
                 filename = args[0];
             }
 
-            SwarmParameters parameters = JsonSerializer.Deserialize<SwarmParameters>(File.ReadAllText(filename));
+            SwarmConfig config = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(filename));
 
-            if (parameters is null)
+            if (config is null)
             {
                 return;
             }
+            /*
+                        IUniverse<IPopulation<Particle>, Particle> universe = new SwarmUniverse(
+                            config.SwarmParameters,
+                            (x => (x[0] * x[0]) + (x[1] * x[1]),
+                            (y1, y2) => y1 < y2)
+                        );
+                        object result = new Simulation<Particle>().Run(
+                            universe,
+                            universe => universe.Epoch >= config.SwarmParameters.MaxEpoch
+                        );*/
 
-            IUniverse<IPopulation<Particle>, Particle> universe = new SwarmUniverse(
-                parameters,
-                x => (x[0] * x[0]) + (x[1] * x[1]),
-                (y1, y2) => y1 < y2
-            );
-            object result = new Simulation<Particle>().Run(
-                universe,
-                universe => universe.Epoch >= parameters.MaxEpoch
-            );
+            var results = new SwarmExperiment().Run(config);
         }
     }
 }

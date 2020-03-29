@@ -12,7 +12,6 @@ namespace Evo.Simulation.Abstracts
         public IUniverse<IPopulation<OrganismType>, OrganismType> Universe { get; }
         public OrganismType[] Organisms { get; }
         public int PopulationSize => Organisms.Length;
-
         public uint Epoch { get; protected set; } = 0;
 
         public abstract object Result { get; }
