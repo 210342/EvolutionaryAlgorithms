@@ -1,4 +1,4 @@
-﻿using Evo.ParticleSwarm;
+﻿using Evo.ParticleSwarm.Experiment;
 using Evo.Simulation;
 using Evo.Simulation.Interfaces;
 using System;
@@ -18,21 +18,14 @@ namespace Evo.EvoApp
                 filename = args[0];
             }
 
-            SwarmConfig config = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(filename));
-
-            if (config is null)
+            for (int i = 1; i < SwarmExperiment.Functions.Length; ++i)
             {
-                return;
-            }
-
-
-            using (FileStream stream = new FileStream("Results.csv", FileMode.Create))
-            {
-                using (StreamWriter writer = new StreamWriter(stream))
-                {
-                    writer.WriteLine("FunctionIndex;PopulationSize;MaxEpochs;ParticleChangeRate;SwarmChangeRate;DecelerationRate;InertiaWeight;InertiaWeightRate;Time;StopCondition;Result;Error");
-                    await new SwarmExperiment().Run(config, writer);
-                }
+                SwarmConfig config = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(filename));
+                using FileStream stream = new FileStream($"Results{i}.csv", FileMode.Create);
+                using StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine("FunctionIndex;PopulationSize;MaxEpochs;StopCondition;MinAccuracy;ParticleChangeRate;SwarmChangeRate;DecelerationRate;InertiaWeight;InertiaWeightRate;Time;Result;Error");
+                writer.WriteLine($"NULL;{config.SwarmParameters};NULL;NULL;NULL");
+                await new SwarmExperiment(new Logger()).Run(config, writer, (i, SwarmExperiment.Functions[i]));
             }
         }
     }

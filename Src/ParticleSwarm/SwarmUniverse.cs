@@ -1,4 +1,5 @@
-﻿using Evo.Simulation.Abstracts;
+﻿using Evo.ParticleSwarm.Experiment;
+using Evo.Simulation.Abstracts;
 using Evo.Simulation.Interfaces;
 using System;
 using System.Collections.Generic;

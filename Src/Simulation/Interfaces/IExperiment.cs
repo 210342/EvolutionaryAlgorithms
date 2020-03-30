@@ -8,6 +8,6 @@ namespace Evo.Simulation.Interfaces
 {
     public interface IExperiment<ParametersType>
     {
-        Task Run(ParametersType parameters, StreamWriter output);
+        Task Run(ParametersType parameters, StreamWriter output, (int, Function) function);
     }
 }
