@@ -26,7 +26,10 @@ namespace Evo.ParticleSwarm
                     _accuracy = Math.Abs(Swarm.BestValue - Swarm.PreviousBestValue);
                     return _accuracy;
                 }
-                return _previousAccuracy;
+                else
+                {
+                    return Swarm.ChangeRate;
+                }
             }
         } 
 
@@ -38,6 +41,7 @@ namespace Evo.ParticleSwarm
         {
             Parameters = swarmParameters;
             Swarm = new Swarm(this, swarmParameters.PopulationSize);
+            _previousAccuracy = _accuracy = swarmParameters.MinAccuracy;
         }
     }
 }

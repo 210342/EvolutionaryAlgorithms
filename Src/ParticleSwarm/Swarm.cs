@@ -25,7 +25,8 @@ namespace Evo.ParticleSwarm
         public bool BestValueChanged { get; private set; } = false;
 
         public double[] BestPosition { get => _bestPosition; set => value.CopyTo(_bestPosition.AsSpan()); }
-        public double ChangeRate { get; private set; }
+        public double ChangeRate { get; private set; } = 1.0;
+        public double ChangeAddend { get; } = 0.0;
         internal SwarmUniverse SwarmUniverse => Universe as SwarmUniverse;
         public override object Result => BestPosition;
 
@@ -35,18 +36,42 @@ namespace Evo.ParticleSwarm
             Particle best = Organisms.Aggregate((p1, p2) => universe.FitnessFunction(p1.BestValue, p2.BestValue) ? p1 : p2);
             _bestPosition = best.BestPosition.Clone() as double[];
             BestValue = best.BestValue;
-            ChangeRate = universe is SwarmUniverse _universe ? _universe.Parameters.SwarmChangeRate : 1.0;
+            PreviousBestValue = BestValue;
+            if (universe is SwarmUniverse swarmUniverse)
+            {
+                ChangeRate = swarmUniverse.Parameters.SwarmChangeRate;
+                ChangeAddend = swarmUniverse.Parameters.SwarmChangeAddend;
+            }
         }
 
         public override void Evolve()
         {
             base.Evolve();
+
+            // evolve particles
             for (int i = 0; i < Organisms.Length; ++i)
             {
                 Organisms[i] = Organisms[i].Evolve(this);
             }
-            ChangeRate *= SwarmUniverse.Parameters.DecelerationRate;
-            BestValueChanged = BestValue != PreviousBestValue;
+
+            // update parameter
+            ChangeRate = Math.Max(0, ChangeRate * SwarmUniverse.Parameters.DecelerationRate + ChangeAddend);
+
+            // update swarm best
+            Particle bestInIteration = Organisms.Aggregate((p1, p2) => Universe.FitnessFunction(p1.Value, p2.Value) ? p1 : p2);
+            if (Universe.FitnessFunction(bestInIteration.Value, BestValue))
+            {
+                BestValue = bestInIteration.Value;
+                BestPosition = bestInIteration.Position;
+                BestValueChanged = true;
+            }
+            else
+            {
+                BestValueChanged = false;
+            }
         }
+
+        public override bool CanEvolve() => base.CanEvolve() 
+            && (ChangeRate > SwarmUniverse.MinAccuracy || Organisms.Any(o => o.ChangeRate > SwarmUniverse.MinAccuracy));
     }
 }

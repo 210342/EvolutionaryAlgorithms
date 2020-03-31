@@ -12,10 +12,11 @@ namespace Evo.Simulation
             IUniverse<IPopulation<OrganismType>, OrganismType> universe,
             Func<IUniverse<IPopulation<OrganismType>, OrganismType>, bool> stopCondition)
         {
-            while (!stopCondition(universe))
+            do
             {
                 universe.Population.Evolve();
             }
+            while (!stopCondition(universe));
             return universe.Population.Result;
         }
     }

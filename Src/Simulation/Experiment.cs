@@ -37,13 +37,13 @@ namespace Evo.Simulation
             )
         };
 
-        protected IDictionary<string, Func<IUniverse<IPopulation<OrganismType>, OrganismType>, bool>> StopConditions { get; } =
+        public static IDictionary<string, Func<IUniverse<IPopulation<OrganismType>, OrganismType>, bool>> StopConditions { get; } =
             new Dictionary<string, Func<IUniverse<IPopulation<OrganismType>, OrganismType>, bool>>()
             {
                 {"Iterations", universe => universe.Epoch >= universe.MaxEpoch },
-                {"Accuracy", universe => universe.MinAccuracy >= universe.Accuracy },
-                {"Iterations or Accuracy", universe => (universe.Epoch >= universe.MaxEpoch) || (universe.MinAccuracy <= universe.Accuracy) },
-                {"Accuracy or Iterations", universe => (universe.Epoch >= universe.MaxEpoch) || (universe.MinAccuracy <= universe.Accuracy) }
+                {"Accuracy", universe => universe.Accuracy < universe.MinAccuracy },
+                {"Iterations or Accuracy", universe => (universe.Epoch >= universe.MaxEpoch) || (universe.Accuracy < universe.MinAccuracy) },
+                {"Accuracy or Iterations", universe => (universe.Epoch >= universe.MaxEpoch) || (universe.Accuracy < universe.MinAccuracy) }
             };
 
         public abstract Task Run(ParametersType parameters, StreamWriter output, (int, Function) function);

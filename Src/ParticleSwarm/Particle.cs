@@ -23,8 +23,10 @@ namespace Evo.ParticleSwarm
         }
 
         public double ChangeRate { get; private set; }
+        public double ChangeAddend { get; }
         public double InertiaWeight { get; private set; }
         public double InertiaWeightRate { get; }
+        public double InertiaWeightAddend { get; }
 
 
         #region Initialisation
@@ -35,6 +37,8 @@ namespace Evo.ParticleSwarm
             ChangeRate = _universe.Parameters.ParticleChangeRate;
             InertiaWeight = _universe.Parameters.InertiaWeight;
             InertiaWeightRate = _universe.Parameters.InertiaWeightRate;
+            InertiaWeightAddend = _universe.Parameters.InertiaWeightAddend;
+            ChangeAddend = _universe.Parameters.ParticleChangeAddend;
         }
 
         protected override void InitialiseRandomly(IUniverse<IPopulation<Particle>, Particle> universe)
@@ -61,20 +65,6 @@ namespace Evo.ParticleSwarm
 
         internal Particle Evolve(Swarm swarm)
         {
-            // update particle best
-            if (swarm.Universe.FitnessFunction(Value, BestValue))
-            {
-                BestValue = Value;
-                BestPosition = Position;
-            }
-
-            // update swarm best
-            if (swarm.Universe.FitnessFunction(Value, swarm.BestValue))
-            {
-                swarm.BestValue = Value;
-                swarm.BestPosition = BestPosition;
-            }
-
             // update velocity
             double[] cognitive = swarm.Universe.GenerateRandomVector(ChangeRate);
             double[] social = swarm.Universe.GenerateRandomVector(swarm.ChangeRate);
@@ -96,8 +86,20 @@ namespace Evo.ParticleSwarm
                     _universe.Size[i].Max
                 );
             }
-            InertiaWeight *= InertiaWeightRate;
-            ChangeRate *= _universe.Parameters.DecelerationRate;
+
+            // update parameters
+            InertiaWeight = Math.Max(0, InertiaWeight * InertiaWeightRate + InertiaWeightAddend);
+            ChangeRate = Math.Max(0, ChangeRate * _universe.Parameters.DecelerationRate + ChangeAddend);
+
+            Value = swarm.Universe.ApproximatedFunction(Position);
+
+            // update particle best
+            if (swarm.Universe.FitnessFunction(Value, BestValue))
+            {
+                BestValue = Value;
+                BestPosition = Position;
+            }
+
             return this;
         }
 

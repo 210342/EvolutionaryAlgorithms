@@ -12,5 +12,6 @@ namespace Evo.Simulation.Interfaces
         object Result { get; }
 
         void Evolve();
+        bool CanEvolve();
     }
 }

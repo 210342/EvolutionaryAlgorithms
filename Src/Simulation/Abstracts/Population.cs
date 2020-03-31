@@ -26,5 +26,7 @@ namespace Evo.Simulation.Abstracts
         {
             ++Epoch;
         }
+
+        public virtual bool CanEvolve() => true;
     }
 }
