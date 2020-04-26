@@ -1,7 +1,5 @@
 ﻿using Evo.Simulation.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Evo.EvoApp
 {

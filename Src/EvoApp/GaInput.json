@@ -1,0 +1,19 @@
+{
+  "SingleSimulation": false,
+  "FunctionIndex": 2,
+  "ExperimentsCount": 16,
+  "InputParameters": {
+    "PopulationSize": 128,
+    "MaxEpoch": 256,
+    "StopCondition": "Iterations",
+    "MinAccuracy": 0.001
+  },
+  "ExperimentParameters": {
+      "MinPopulation": 16,
+      "MinEpoch": 16,
+      "PopulationRate": 16,
+      "EpochRate": 16,
+      "MaxPopulation": 512,
+      "MaxEpoch": 512
+  }
+}

@@ -1,19 +1,20 @@
 ﻿{
   "SingleSimulation": false,
   "FunctionIndex": 1,
+  "ExperimentsCount": 16,
   "SwarmParameters": {
     "PopulationSize": 128,
     "MaxEpoch": 256,
     "StopCondition": "Iterations",
     "MinAccuracy": 0.001,
-    "ParticleChangeRate": 1.0,
-    "ParticleChangeAddend": -0.03,
-    "SwarmChangeRate": 2.0,
-    "SwarmChangeAddend": -0.03,
-    "DecelerationRate": 0.95,
+    "ParticleChangeRate": 1.7,
+    "ParticleChangeAddend": 0,
+    "SwarmChangeRate": 1.1,
+    "SwarmChangeAddend": 0,
+    "DecelerationRate": 1,
     "InertiaWeight": 0.8,
-    "InertiaWeightRate": 0.99,
-    "InertiaWeightAddend": -0.02
+    "InertiaWeightRate": 1,
+    "InertiaWeightAddend": 0
   },
   "ExperimentParameters": {
     "Min": {

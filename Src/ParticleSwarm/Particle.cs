@@ -1,8 +1,7 @@
-﻿using Evo.Simulation.Interfaces;
-using Evo.Simulation.Abstracts;
+﻿using Evo.Simulation.Abstracts;
+using Evo.Simulation.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Evo.ParticleSwarm
 {

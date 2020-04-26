@@ -12,6 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="GaInput.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SwarmInput.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

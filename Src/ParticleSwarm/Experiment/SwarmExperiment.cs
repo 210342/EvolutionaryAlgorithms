@@ -1,11 +1,11 @@
 ﻿using Evo.Simulation;
 using Evo.Simulation.Interfaces;
+using Evo.Simulation.SimulationExperiment;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Evo.ParticleSwarm.Experiment
@@ -31,18 +31,15 @@ namespace Evo.ParticleSwarm.Experiment
                 populationSize += config.ExperimentParameters.Rate.PopulationSize)
             {
                 config.SwarmParameters.PopulationSize = populationSize;
-                Stopwatch timer = new Stopwatch();
-                timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
-                timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 populations.Add((populationSize, error));
                 Logger.Print($"Population {populationSize}");
             }
@@ -54,18 +51,15 @@ namespace Evo.ParticleSwarm.Experiment
                 maxEpoch += config.ExperimentParameters.Rate.MaxEpoch)
             {
                 config.SwarmParameters.MaxEpoch = maxEpoch;
-                Stopwatch timer = new Stopwatch();
-                timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
-                timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 epochs.Add((maxEpoch, error));
                 Logger.Print($"Epochs {maxEpoch}");
             }
@@ -80,15 +74,15 @@ namespace Evo.ParticleSwarm.Experiment
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
                 timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 particleChangeRates.Add((particleChangeRate, error));
                 Logger.Print($"Particle Change Rate {particleChangeRate}");
             }
@@ -103,15 +97,15 @@ namespace Evo.ParticleSwarm.Experiment
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
                 timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 particleChangeAddends.Add((particleChangeAddend, error));
                 Logger.Print($"Particle Change Addend {particleChangeAddend}");
             }
@@ -126,15 +120,15 @@ namespace Evo.ParticleSwarm.Experiment
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
                 timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 swarmChangeRates.Add((swarmChangeRate, error));
                 Logger.Print($"Swarm Change Rate {swarmChangeRate}");
             }
@@ -149,15 +143,15 @@ namespace Evo.ParticleSwarm.Experiment
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
                 timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 swarmChangeAddends.Add((swarmChangeAddend, error));
                 Logger.Print($"Swarm Change Addend {swarmChangeAddend}");
             }
@@ -172,15 +166,15 @@ namespace Evo.ParticleSwarm.Experiment
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
                 timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 decelerationRates.Add((decelerationRate, error));
                 Logger.Print($"Deceleration Rate {decelerationRate}");
             }
@@ -195,15 +189,15 @@ namespace Evo.ParticleSwarm.Experiment
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
                 timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 inertiaWeights.Add((inertiaWeight, error));
                 Logger.Print($"Inertia Weight {inertiaWeight}");
             }
@@ -218,15 +212,15 @@ namespace Evo.ParticleSwarm.Experiment
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
                 timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 inertiaWeightRates.Add((inertiaWeightRate, error));
                 Logger.Print($"Inertia Weight Rate {inertiaWeightRate}");
             }
@@ -241,15 +235,15 @@ namespace Evo.ParticleSwarm.Experiment
                 Stopwatch timer = new Stopwatch();
                 timer.Start();
                 SwarmUniverse universe = new SwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                object result = new Simulation<Particle>().Run(
+                Result result = new Simulation<Particle>().Run(
                     universe,
                     StopConditions[config.SwarmParameters.StopCondition]
                 );
                 timer.Stop();
 
-                double[] resultPosition = result as double[];
+                double[] resultPosition = result.ReturnedValue as double[];
                 double error = Math.Abs(function.ExpectedValue - function.Evaluate(resultPosition));
-                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{timer.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{universe.Epoch};{universe.Accuracy}");
+                await output.WriteLineAsync($"{functionIndex};{config.SwarmParameters};{result.ElapsedMilliseconds};[{string.Join(",", resultPosition)}];{error};{result.Epochs};{result.Accuracy}");
                 inertiaWeightAddends.Add((inertiaWeightAddend, error));
                 Logger.Print($"Inertia Weight Addend {inertiaWeightAddend}");
             }

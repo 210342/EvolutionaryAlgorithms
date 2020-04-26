@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParticleSwarm", "ParticleSw
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulation", "Simulation\Simulation.csproj", "{B2B23645-BCFB-4286-A6DE-A8E615428C4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvoApp", "EvoApp\EvoApp.csproj", "{82E7B782-EEC0-4BD0-8DF9-57C6FCF29D43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvoApp", "EvoApp\EvoApp.csproj", "{82E7B782-EEC0-4BD0-8DF9-57C6FCF29D43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

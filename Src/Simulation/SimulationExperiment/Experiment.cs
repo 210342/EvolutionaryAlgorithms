@@ -1,13 +1,11 @@
-﻿using Evo.Simulation.Abstracts;
-using Evo.Simulation.Interfaces;
+﻿using Evo.Simulation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Evo.Simulation
+namespace Evo.Simulation.SimulationExperiment
 {
     public abstract class Experiment<OrganismType, PopulationType, ParametersType> : IExperiment<ParametersType>
         where OrganismType : IOrganism<OrganismType, IPopulation<OrganismType>>

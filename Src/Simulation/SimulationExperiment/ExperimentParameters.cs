@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Evo.Simulation
+﻿namespace Evo.Simulation.SimulationExperiment
 {
     public class ExperimentParameters
     {
