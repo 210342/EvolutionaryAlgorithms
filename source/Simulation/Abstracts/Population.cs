@@ -8,16 +8,11 @@ namespace Evo.Simulation.Abstracts
         where OrganismType : IOrganism<OrganismType, IPopulation<OrganismType>>
     {
         public IUniverse<IPopulation<OrganismType>, OrganismType> Universe { get; }
-        public OrganismType[] Organisms { get; protected set; }
+        public OrganismType[] Organisms { get; }
         public int PopulationSize => Organisms.Length;
         public uint Epoch { get; protected set; } = 0;
 
         public abstract object Result { get; }
-
-        protected Population(IUniverse<IPopulation<OrganismType>, OrganismType> universe)
-        {
-            Universe = universe;
-        }
 
         public Population(IUniverse<IPopulation<OrganismType>, OrganismType> universe, IEnumerable<OrganismType> organisms)
         {

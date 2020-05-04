@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Evo.ParticleSwarm
 {
-    public class Swarm : Population<Particle>
+    public sealed class Swarm : Population<Particle>
     {
         private readonly double[] _bestPosition;
         private double _bestValue;
@@ -28,7 +28,8 @@ namespace Evo.ParticleSwarm
         internal SwarmUniverse SwarmUniverse => Universe as SwarmUniverse;
         public override object Result => BestPosition;
 
-        internal Swarm(IUniverse<IPopulation<Particle>, Particle> universe, Particle[] particles) : base(universe, particles)
+        internal Swarm(IUniverse<IPopulation<Particle>, Particle> universe, uint populationSize) :
+            base(universe, Enumerable.Range(0, (int)populationSize).Select(i => new Particle(universe)))
         {
             Particle best = Organisms.Aggregate((p1, p2) => universe.FitnessFunction(p1.BestValue, p2.BestValue) ? p1 : p2);
             _bestPosition = best.BestPosition.Clone() as double[];
@@ -40,9 +41,6 @@ namespace Evo.ParticleSwarm
                 ChangeAddend = swarmUniverse.Parameters.SwarmChangeAddend;
             }
         }
-
-        internal Swarm(IUniverse<IPopulation<Particle>, Particle> universe, uint populationSize) :
-            this(universe, Enumerable.Range(0, (int)populationSize).Select(i => new Particle(universe)).ToArray()) { }
 
         public override void Evolve()
         {

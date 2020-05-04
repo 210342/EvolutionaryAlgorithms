@@ -30,10 +30,5 @@ namespace Evo.Simulation.Abstracts
             FitnessFunction = functions.Item2;
         }
 
-        public virtual void IterateEpoch()
-        {
-            Population.Evolve();
-        }
-
     }
 }

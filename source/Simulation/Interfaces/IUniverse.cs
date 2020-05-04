@@ -28,7 +28,5 @@ namespace Evo.Simulation.Interfaces
         double[] GenerateRandomVector(double minValue, double maxValue) => Enumerable.Range(0, Size.Length)
             .Select(i => RNG.NextDouble() * (maxValue - minValue) + minValue)
             .ToArray();
-
-        void IterateEpoch();
     }
 }

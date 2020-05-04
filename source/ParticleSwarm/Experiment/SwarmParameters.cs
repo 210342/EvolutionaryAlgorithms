@@ -9,8 +9,6 @@ namespace Evo.ParticleSwarm.Experiment
     {
         public double ParticleChangeRate { get; set; }
         public double ParticleChangeAddend { get; set; }
-        public int SwarmPermutePeriod { get; set; } = 0;
-        public int SubSwarmCount { get; set; } = 1;
         public double SwarmChangeRate { get; set; }
         public double SwarmChangeAddend { get; set; }
         public double DecelerationRate { get; set; }
