@@ -10,7 +10,7 @@ namespace Evo.ParticleSwarm
 {
     public class MultiSwarm : Population<Particle>
     {
-        protected IEnumerable<Swarm> _swarms;
+        protected SubSwarm[] _swarms;
 
         public IReadOnlyCollection<Swarm> SubSwarms => _swarms as IReadOnlyCollection<Swarm>;
         public SwarmParameters Parameters { get; private set; }
@@ -26,7 +26,7 @@ namespace Evo.ParticleSwarm
             AssignOrganisms(Organisms);
         }
 
-        public override object Result => throw new NotImplementedException();
+        public override object Result => _swarms.Aggregate((p1, p2) => Universe.FitnessFunction(p1.BestValue, p2.BestValue) ? p1 : p2).BestPosition;
 
         public override void Evolve()
         {
@@ -36,15 +36,38 @@ namespace Evo.ParticleSwarm
                 var shuffled = Organisms.OrderBy(o => Universe.RNG.Next());
                 AssignOrganisms(shuffled);
             }
+            if (Parameters.UseEliteParticles)
+            {
+                for (int i = 0; i < Parameters.SubSwarmCount; ++i)
+                {
+                    for (int dimension = 0; dimension < _swarms[0].BestPosition.Length; ++dimension)
+                    {
+                        double sum = 0;
+                        for (int j = 0; j < Parameters.SubSwarmCount; ++j)
+                        {
+                            if (i != j)
+                            {
+                                sum += _swarms[i].BestPosition[dimension];
+                            }
+                        }
+                        _swarms[i].EliteParticle.Position[dimension] = (sum / Parameters.SubSwarmCount) * (1 + Universe.RNG.NextDouble());
+                    }
+                }
+            }
         }
 
         private void AssignOrganisms(IEnumerable<Particle> organisms)
         {
-            _swarms = Enumerable
-                .Range(0, Parameters.SubSwarmCount)
-                .Select(i =>
-                    new SubSwarm(Universe, organisms.Skip(i * (int)Parameters.PopulationSize).Take((int)Parameters.PopulationSize).ToArray())
+            for (int i = 0; i < Parameters.SubSwarmCount; ++i)
+            {
+                _swarms[i] = new SubSwarm(
+                    Universe, 
+                    organisms
+                        .Skip(i * (int)Parameters.PopulationSize)
+                        .Take((int)Parameters.PopulationSize)
+                        .ToArray()
                 );
+            }
         }
     }
 }

@@ -7,13 +7,13 @@ namespace Evo.ParticleSwarm
 {
     public sealed class Particle : Organism<Particle>
     {
-        private readonly bool _useEliteParticles = false;
         private readonly SwarmUniverse _universe;
         private double[] _bestPosition;
 
         public double[] Velocity { get; private set; }
         public double[] Position { get; private set; }
         public double Value { get; private set; }
+        public override double Result => Value;
 
         public double BestValue { get; private set; }
         public double[] BestPosition
@@ -27,15 +27,13 @@ namespace Evo.ParticleSwarm
         public double InertiaWeight { get; private set; }
         public double InertiaWeightRate { get; }
         public double InertiaWeightAddend { get; }
+        public double ApplyBestPositionThreshold { get; set; } = 1.0;
 
 
         #region Initialisation
 
-        internal Particle(IUniverse<IPopulation<Particle>, Particle> universe) : this(universe, false) { }
-
-        internal Particle(IUniverse<IPopulation<Particle>, Particle> universe, bool useEliteParticles) : base(universe) 
+        internal Particle(IUniverse<IPopulation<Particle>, Particle> universe) : base(universe) 
         {
-            _useEliteParticles = useEliteParticles;
             _universe = universe as SwarmUniverse;
             ChangeRate = _universe.Parameters.ParticleChangeRate;
             InertiaWeight = _universe.Parameters.InertiaWeight;
@@ -68,12 +66,12 @@ namespace Evo.ParticleSwarm
 
         internal Particle Evolve(Swarm swarm)
         {
-            return _useEliteParticles && swarm.BestPosition.Equals(BestPosition) 
-                ? EvolveElite(swarm)
-                : EvolveCommon(swarm);
+            return ApplyBestPositionThreshold >= 1.0 || _universe.RNG.NextDouble() < ApplyBestPositionThreshold
+                ? EvolveByVelocity(swarm)
+                : EvolveByBestPosition(swarm);
         }
 
-        private Particle EvolveCommon(Swarm swarm)
+        private Particle EvolveByVelocity(Swarm swarm)
         {
             // update velocity
             double[] cognitive = swarm.Universe.GenerateRandomVector(ChangeRate);
@@ -113,7 +111,14 @@ namespace Evo.ParticleSwarm
             return this;
         }
 
-        private Particle EvolveElite(Swarm swarm) { return this; }
+        private Particle EvolveByBestPosition(Swarm swarm)
+        {
+            for (int i = 0; i < Position.Length; ++i)
+            {
+                Position[i] = BestPosition[i] * (1 + _universe.RNG.NextDouble());
+            }
+            return this; 
+        }
 
         #endregion
     }

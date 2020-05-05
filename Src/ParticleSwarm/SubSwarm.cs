@@ -7,10 +7,21 @@ using System.Text;
 
 namespace Evo.ParticleSwarm
 {
-    internal class SubSwarm : Swarm
+    public class SubSwarm : Swarm
     {
+        public Particle EliteParticle { get; private set; }
+
         public SubSwarm(IUniverse<IPopulation<Particle>, Particle> universe, Particle[] organisms) 
-            : base(universe, organisms) { }
+            : base(universe, organisms) 
+        {
+            EliteParticle = Organisms.Aggregate((p1, p2) => Universe.FitnessFunction(p1.BestValue, p2.BestValue) ? p1 : p2);
+        }
+
+        public override void Evolve()
+        {
+            base.Evolve();
+            EliteParticle = Organisms.Aggregate((p1, p2) => Universe.FitnessFunction(p1.BestValue, p2.BestValue) ? p1 : p2);
+        }
 
         public override string ToString()
         {

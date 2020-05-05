@@ -14,15 +14,30 @@ namespace Evo.EvoApp
     {
         static async Task Main(string[] args)
         {
-            string swarmCOnfigFilename = "SwarmInput.json";
+            await MPSO(args);
+        }
+
+        public static async Task MPSO(string[] args)
+        {
+            string swarmConfigFilename = "SwarmInput.json";
+            if (args.Length > 0)
+            {
+                swarmConfigFilename = args[0];
+            }
+            SwarmConfig swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmConfigFilename));
+        }
+
+        public static async Task PSO(string[] args)
+        {
+            string swarmConfigFilename = "SwarmInput.json";
             string gaConfigFilename = "GaInput.json";
             if (args.Length > 0)
             {
-                swarmCOnfigFilename = args[0];
+                swarmConfigFilename = args[0];
             }
-            SwarmConfig swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmCOnfigFilename));
+            SwarmConfig swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmConfigFilename));
             if (File.Exists(gaConfigFilename))
-            { 
+            {
                 GaConfig gaConfig = JsonSerializer.Deserialize<GaConfig>(File.ReadAllText(gaConfigFilename));
                 if (gaConfig != null)
                 {
@@ -59,14 +74,15 @@ namespace Evo.EvoApp
                         using StreamWriter writer = new StreamWriter(stream);
                         writer.WriteLine("FunctionIndex;PopulationSize;MaxEpochs;StopCondition;MinAccuracy;ParticleChangeRate;ParticleChangeAddend;SwarmChangeRate;SwarmChangeAddend;DecelerationRate;InertiaWeight;InertiaWeightRate;InertiaWeightAddend;Time;Result;Error;ActualEpochs;ActualAccuracy");
                         writer.WriteLine($"NULL;{swarmConfig.SwarmParameters};NULL;NULL;NULL;NULL;NULL");
-                        swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmCOnfigFilename));
+                        swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmConfigFilename));
                         await new SwarmExperiment(new Logger()).Run(swarmConfig, writer, (i, SwarmExperiment.Functions[i]));
-                        swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmCOnfigFilename));
+                        swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmConfigFilename));
                         swarmConfig.SwarmParameters.StopCondition = "Accuracy";
                         await new SwarmExperiment(new Logger()).Run(swarmConfig, writer, (i, SwarmExperiment.Functions[i]));
                     }
                 }
             }
+
         }
     }
 }

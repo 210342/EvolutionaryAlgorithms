@@ -17,6 +17,7 @@ namespace Evo.ParticleSwarm.Experiment
         public double InertiaWeight { get; set; }
         public double InertiaWeightRate { get; set; }
         public double InertiaWeightAddend { get; set; }
+        public bool UseEliteParticles { get; set; } = false;
 
         public override string ToString()
         {
