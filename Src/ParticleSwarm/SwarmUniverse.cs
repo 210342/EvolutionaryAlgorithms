@@ -9,10 +9,10 @@ namespace Evo.ParticleSwarm
     {
         public SwarmParameters Parameters { get; }
         public override IPopulation<Particle> Population => Swarm;
-        public Swarm Swarm { get; }
-        public override double Accuracy => Swarm.BestValueChanged 
-            ? Math.Abs(Swarm.BestValue - Swarm.PreviousBestValue) 
-            : Swarm.ChangeRate;
+        public Swarm Swarm { get; protected set; }
+        public override double? Accuracy => Swarm?.BestValueChanged ?? false 
+            ? Math.Abs(Swarm?.BestValue - Swarm?.PreviousBestValue ?? 0) 
+            : Swarm?.ChangeRate;
 
         public SwarmUniverse(
             SwarmParameters swarmParameters,

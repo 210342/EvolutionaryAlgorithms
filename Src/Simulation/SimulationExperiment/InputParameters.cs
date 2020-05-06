@@ -11,6 +11,16 @@ namespace Evo.Simulation.SimulationExperiment
         public string StopCondition { get; set; }
         public double MinAccuracy { get; set; }
 
+        public InputParameters() { }
+
+        public InputParameters(InputParameters other)
+        {
+            PopulationSize = other.PopulationSize;
+            MaxEpoch = other.MaxEpoch;
+            StopCondition = other.StopCondition;
+            MinAccuracy = other.MinAccuracy;
+        }
+
         public override string ToString()
         {
             return $"{PopulationSize};{MaxEpoch};{StopCondition};{MinAccuracy}";

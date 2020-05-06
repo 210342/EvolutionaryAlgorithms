@@ -29,6 +29,8 @@ namespace Evo.ParticleSwarm
         public double InertiaWeightAddend { get; }
         public double ApplyBestPositionThreshold { get; set; } = 1.0;
 
+        public bool SuspendEvolution { get; set; } = false;
+
 
         #region Initialisation
 
@@ -66,6 +68,10 @@ namespace Evo.ParticleSwarm
 
         internal Particle Evolve(Swarm swarm)
         {
+            if (SuspendEvolution)
+            {
+                return this;
+            }
             return ApplyBestPositionThreshold >= 1.0 || _universe.RNG.NextDouble() < ApplyBestPositionThreshold
                 ? EvolveByVelocity(swarm)
                 : EvolveByBestPosition(swarm);

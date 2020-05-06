@@ -19,7 +19,12 @@ namespace Evo.ParticleSwarm
 
         public override void Evolve()
         {
+            if (SwarmParameters.UseEliteParticles)
+            {
+                EliteParticle.SuspendEvolution = true;
+            }
             base.Evolve();
+            EliteParticle.SuspendEvolution = false;
             EliteParticle = Organisms.Aggregate((p1, p2) => Universe.FitnessFunction(p1.BestValue, p2.BestValue) ? p1 : p2);
         }
 

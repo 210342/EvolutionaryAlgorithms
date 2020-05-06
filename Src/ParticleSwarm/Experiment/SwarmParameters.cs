@@ -19,9 +19,26 @@ namespace Evo.ParticleSwarm.Experiment
         public double InertiaWeightAddend { get; set; }
         public bool UseEliteParticles { get; set; } = false;
 
+        public SwarmParameters() { }
+
+        public SwarmParameters(SwarmParameters other) : base(other)
+        {
+            ParticleChangeRate = other.ParticleChangeRate;
+            ParticleChangeAddend = other.ParticleChangeAddend;
+            SwarmPermutePeriod = other.SwarmPermutePeriod;
+            SubSwarmCount = other.SubSwarmCount;
+            SwarmChangeRate = other.SwarmChangeRate;
+            SwarmChangeAddend = other.SwarmChangeAddend;
+            DecelerationRate = other.DecelerationRate;
+            InertiaWeight = other.InertiaWeight;
+            InertiaWeightRate = other.InertiaWeightRate;
+            InertiaWeightAddend = other.InertiaWeightAddend;
+            UseEliteParticles = other.UseEliteParticles;
+        }
+
         public override string ToString()
         {
-            return $"{base.ToString()};{ParticleChangeRate};{ParticleChangeAddend};{SwarmChangeRate};{SwarmChangeAddend};{DecelerationRate};{InertiaWeight};{InertiaWeightRate};{InertiaWeightAddend}";
+            return $"{base.ToString()};{ParticleChangeRate};{ParticleChangeAddend};{SwarmChangeRate};{SwarmChangeAddend};{DecelerationRate};{InertiaWeight};{InertiaWeightRate};{InertiaWeightAddend};{SubSwarmCount};{SwarmPermutePeriod};{UseEliteParticles}";
         }
     }
 }

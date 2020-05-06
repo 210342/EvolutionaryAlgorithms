@@ -1,4 +1,5 @@
-﻿using Evo.Simulation.Abstracts;
+﻿using Evo.ParticleSwarm.Experiment;
+using Evo.Simulation.Abstracts;
 using Evo.Simulation.Interfaces;
 using System;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Evo.ParticleSwarm
         public double[] BestPosition { get => _bestPosition; set => value.CopyTo(_bestPosition.AsSpan()); }
         public double ChangeRate { get; private set; } = 1.0;
         public double ChangeAddend { get; } = 0.0;
-        internal SwarmUniverse SwarmUniverse => Universe as SwarmUniverse;
+        internal SwarmParameters SwarmParameters { get; }
         public override object Result => BestPosition;
 
         internal Swarm(IUniverse<IPopulation<Particle>, Particle> universe, Particle[] particles) : base(universe, particles)
@@ -38,6 +39,7 @@ namespace Evo.ParticleSwarm
             {
                 ChangeRate = swarmUniverse.Parameters.SwarmChangeRate;
                 ChangeAddend = swarmUniverse.Parameters.SwarmChangeAddend;
+                SwarmParameters = swarmUniverse.Parameters;
             }
         }
 
@@ -55,7 +57,7 @@ namespace Evo.ParticleSwarm
             }
 
             // update parameter
-            ChangeRate = Math.Max(0, ChangeRate * SwarmUniverse.Parameters.DecelerationRate + ChangeAddend);
+            ChangeRate = Math.Max(0, ChangeRate * SwarmParameters.DecelerationRate + ChangeAddend);
 
             // update swarm best
             Particle bestInIteration = Organisms.Aggregate((p1, p2) => Universe.FitnessFunction(p1.Value, p2.Value) ? p1 : p2);
@@ -72,6 +74,6 @@ namespace Evo.ParticleSwarm
         }
 
         public override bool CanEvolve() => base.CanEvolve() 
-            && (ChangeRate > SwarmUniverse.MinAccuracy || Organisms.Any(o => o.ChangeRate > SwarmUniverse.MinAccuracy));
+            && (ChangeRate > Universe.MinAccuracy || Organisms.Any(o => o.ChangeRate > Universe.MinAccuracy));
     }
 }

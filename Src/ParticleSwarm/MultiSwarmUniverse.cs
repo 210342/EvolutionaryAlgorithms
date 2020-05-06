@@ -8,23 +8,18 @@ using System.Text;
 
 namespace Evo.ParticleSwarm
 {
-    public class MultiSwarmUniverse : Universe<Particle, IPopulation<Particle>>, IUniverse<IPopulation<Particle>, Particle>
+    public class MultiSwarmUniverse : SwarmUniverse
     {
-
-        public SwarmParameters Parameters { get; set; }
-
-        public override IPopulation<Particle> Population { get; private set; }
-
-        public override double Accuracy => throw new NotImplementedException();
+        public override IPopulation<Particle> Population { get; }
 
         public MultiSwarmUniverse(
             SwarmParameters swarmParameters,
             Simulation.Range[] universeSize,
             (Func<double[], double>, Func<double, double, bool>) functions)
-            : base(universeSize, swarmParameters.MaxEpoch, swarmParameters.MinAccuracy, functions)
+            : base(swarmParameters, universeSize, functions)
         {
-            Parameters = swarmParameters;
             Population = new MultiSwarm(this, swarmParameters);
+            Swarm = null;
         }
     }
 }

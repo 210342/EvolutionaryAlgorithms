@@ -19,6 +19,15 @@ namespace Evo.ParticleSwarm.Experiment
             int functionIndex = functionTuple.Item1;
             Function function = functionTuple.Item2;
 
+            var mpsoParams = new SwarmParameters(config.SwarmParameters)
+            {
+                SwarmPermutePeriod = 8
+            };
+            var mspsoParams = new SwarmParameters(config.SwarmParameters)
+            {
+                UseEliteParticles = true
+            };
+
             var mpsoMetrics = new List<IDictionary<string, IList<double[]>>>();
             var mspsoMetrics = new List<IDictionary<string, IList<double[]>>>();
             for (uint populationSize = config.ExperimentParameters.Min.PopulationSize;
@@ -26,28 +35,33 @@ namespace Evo.ParticleSwarm.Experiment
                 populationSize += config.ExperimentParameters.Rate.PopulationSize)
             {
                 Logger.Print($"Population {populationSize}");
+                mpsoParams.PopulationSize = populationSize;
+                mspsoParams.PopulationSize = populationSize;
+
                 await output.WriteLineAsync($"MPSO;function: ;{functionIndex};Population: ;{populationSize}; Experiments: ;{config.ExperimentsCount}");
                 for (int i = 0; i < config.ExperimentsCount; ++i)
                 {
-                    config.SwarmParameters.PopulationSize = populationSize;
-                    MultiSwarmUniverse universe = new MultiSwarmUniverse(config.SwarmParameters, function.UniverseSize, (function.Evaluate, function.Fitness));
-                    Result result = new Simulation<Particle>().Run(
+                    MultiSwarmUniverse universe = new MultiSwarmUniverse(mpsoParams, function.UniverseSize, (function.Evaluate, function.Fitness));
+                    new Simulation<Particle>().Run(
                         universe,
                         StopConditions[config.SwarmParameters.StopCondition]
                     );
                     mpsoMetrics.Add(universe.Metrics);
                 }
-                await output.WriteLineAsync(string.Join(';', Enumerable.Range(1, 1 + mpsoMetrics[0][MultiSwarmUniverse.ACCURACY_RANGE_KEY].Count)));
-                await output.WriteLineAsync(string.Join(';', mpsoMetrics[0][MultiSwarmUniverse.ACCURACY_RANGE_KEY].Select(d => d[0])));
-                await output.WriteLineAsync(string.Join(';', mpsoMetrics[0][MultiSwarmUniverse.ACCURACY_RANGE_KEY].Select(d => d[1])));
-                await output.WriteLineAsync();
-                await output.WriteLineAsync(string.Join(';', Enumerable.Range(1, 1 + mpsoMetrics[0][MultiSwarmUniverse.MEAN_ACCURACY_KEY].Count)));
-                await output.WriteLineAsync(string.Join(';', MeanByIndex(mpsoMetrics.Select(d => d[MultiSwarmUniverse.MEAN_ACCURACY_KEY]))));
-
+                await PrintMetrics(output, mpsoMetrics);
 
                 await output.WriteLineAsync($"MSPSO;function: ;{functionIndex};Population: ;{populationSize}; Experiments: ;{config.ExperimentsCount}");
+                for (int i = 0; i < config.ExperimentsCount; ++i)
+                {
+                    MultiSwarmUniverse universe = new MultiSwarmUniverse(mspsoParams, function.UniverseSize, (function.Evaluate, function.Fitness));
+                    new Simulation<Particle>().Run(
+                        universe,
+                        StopConditions[config.SwarmParameters.StopCondition]
+                    );
+                    mspsoMetrics.Add(universe.Metrics);
+                }
+                await PrintMetrics(output, mspsoMetrics);
             }
-
         }
 
         private IEnumerable<double> MeanByIndex(IEnumerable<IList<double[]>> metric)
@@ -65,6 +79,23 @@ namespace Evo.ParticleSwarm.Experiment
                 result.Add(sum / metric.FirstOrDefault().Count);
             }
             return result;
+        }
+
+        private async Task PrintMetrics(StreamWriter output, List<IDictionary<string, IList<double[]>>>metrics)
+        {
+            await output.WriteLineAsync();
+            await output.WriteAsync("Iterations;");
+            await output.WriteLineAsync(string.Join(';', Enumerable.Range(1, 1 + metrics[0][MultiSwarmUniverse.ACCURACY_RANGE_KEY].Count)));
+            await output.WriteAsync("Minimum accuracy;");
+            await output.WriteLineAsync(string.Join(';', metrics[0][MultiSwarmUniverse.ACCURACY_RANGE_KEY].Select(d => d[0])));
+            await output.WriteAsync("Maximum accuracy;");
+            await output.WriteLineAsync(string.Join(';', metrics[0][MultiSwarmUniverse.ACCURACY_RANGE_KEY].Select(d => d[1])));
+            await output.WriteLineAsync();
+            await output.WriteAsync("Iterations;");
+            await output.WriteLineAsync(string.Join(';', Enumerable.Range(1, 1 + metrics[0][MultiSwarmUniverse.MEAN_ACCURACY_KEY].Count)));
+            await output.WriteAsync("Mean accuracy;");
+            await output.WriteLineAsync(string.Join(';', MeanByIndex(metrics.Select(d => d[MultiSwarmUniverse.MEAN_ACCURACY_KEY]))));
+            await output.WriteLineAsync();
         }
     }
 }

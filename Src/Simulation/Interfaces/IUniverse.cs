@@ -14,7 +14,7 @@ namespace Evo.Simulation.Interfaces
         PopulationType Population { get; }
         uint Epoch { get; }
         uint MaxEpoch { get; }
-        double Accuracy { get; }
+        double? Accuracy { get; }
         double MinAccuracy { get; }
 
         double[] GenerateRandomVector() => Enumerable.Range(0, Size.Length)

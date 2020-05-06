@@ -19,12 +19,20 @@ namespace Evo.EvoApp
 
         public static async Task MPSO(string[] args)
         {
-            string swarmConfigFilename = "SwarmInput.json";
+            string swarmConfigFilename = "MultiSwarmInput.json";
             if (args.Length > 0)
             {
                 swarmConfigFilename = args[0];
             }
             SwarmConfig swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmConfigFilename));
+            for (int i = 0; i < SwarmExperiment.Functions.Length; ++i)
+            {
+                using FileStream stream = new FileStream($"ResultsMulti_{i}.csv", FileMode.Create);
+                using StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine($"NULL;{swarmConfig.SwarmParameters};NULL;NULL;NULL;NULL;NULL");
+                writer.WriteLine();
+                await new MultiSwarmExperiment(new Logger()).Run(swarmConfig, writer, (i, SwarmExperiment.Functions[i]));
+            }
         }
 
         public static async Task PSO(string[] args)
@@ -45,7 +53,7 @@ namespace Evo.EvoApp
                     using FileStream stream = new FileStream($"Simulation_function{gaConfig.FunctionIndex}.csv", FileMode.Create);
                     using StreamWriter writer = new StreamWriter(stream);
                     writer.WriteLine("FunctionIndex;PopulationSize;MaxEpochs;Time;Result;ResultFitness;Error;ActualEpochs;ActualAccuracy");
-                    var experiment = new GaComparisonExperiment(swarmConfig);
+                    var experiment = new GaComparisonExperiment(new Logger(), swarmConfig);
                     await experiment.Run(gaConfig, writer, (gaConfig.FunctionIndex, function));
                 }
             }

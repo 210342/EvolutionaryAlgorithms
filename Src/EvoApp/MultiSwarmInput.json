@@ -3,6 +3,7 @@
   "FunctionIndex": 1,
   "ExperimentsCount": 16,
   "SwarmParameters": {
+    "SubSwarmCount": 4,
     "PopulationSize": 32,
     "MaxEpoch": 64,
     "StopCondition": "Iterations",
@@ -18,6 +19,7 @@
   },
   "ExperimentParameters": {
     "Min": {
+      "SubSwarmCount": 2,
       "PopulationSize": 32,
       "MaxEpoch": 32,
       "ParticleChangeRate": 0.1,
@@ -30,6 +32,7 @@
       "InertiaWeightAddend": -0.1
     },
     "Rate": {
+      "SubSwarmCount": 2,
       "PopulationSize": 32,
       "MaxEpoch": 32,
       "ParticleChangeRate": 0.1,
@@ -42,6 +45,7 @@
       "InertiaWeightAddend": 0.01
     },
     "Max": {
+      "SubSwarmCount": 8,
       "PopulationSize": 64,
       "MaxEpoch": 64,
       "ParticleChangeRate": 4.0,

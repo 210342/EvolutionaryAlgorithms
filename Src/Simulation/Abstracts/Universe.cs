@@ -20,7 +20,7 @@ namespace Evo.Simulation.Abstracts
         public Func<double, double, bool> FitnessFunction { get; }
         public uint MaxEpoch { get; }
         public uint Epoch => Population.Epoch;
-        public abstract double Accuracy { get; }
+        public abstract double? Accuracy { get; }
         public double MinAccuracy { get; }
         public IDictionary<string, IList<double[]>> Metrics { get; } = new Dictionary<string, IList<double[]>>();
 
@@ -49,22 +49,22 @@ namespace Evo.Simulation.Abstracts
 
         private void AccuracyRangeMetric(Universe<OrganismType, PopulationType> universe)
         {
-            if (!Metrics.ContainsKey(ACCURACY_RANGE_KEY))
-            {
-                Metrics.Add(ACCURACY_RANGE_KEY, new List<double[]>());
-            }
-            Metrics[ACCURACY_RANGE_KEY].Add(new[] { ApproximatedFunction(Population.Result as double[]) });
-        }
-
-        private void MeanAccuracyMetric(Universe<OrganismType, PopulationType> universe)
-        {
             if (!Metrics.ContainsKey(MEAN_ACCURACY_KEY))
             {
                 Metrics.Add(MEAN_ACCURACY_KEY, new List<double[]>());
             }
+            Metrics[MEAN_ACCURACY_KEY].Add(new[] { ApproximatedFunction(Population.Result as double[]) });
+        }
+
+        private void MeanAccuracyMetric(Universe<OrganismType, PopulationType> universe)
+        {
+            if (!Metrics.ContainsKey(ACCURACY_RANGE_KEY))
+            {
+                Metrics.Add(ACCURACY_RANGE_KEY, new List<double[]>());
+            }
             double min = Population.Organisms.Aggregate((p1, p2) => FitnessFunction(p1.Result, p2.Result) ? p1 : p2).Result;
             double max = Population.Organisms.Aggregate((p1, p2) => FitnessFunction(p1.Result, p2.Result) ? p2 : p1).Result;
-            Metrics[MEAN_ACCURACY_KEY].Add(new[] { min, max });
+            Metrics[ACCURACY_RANGE_KEY].Add(new[] { min, max });
         }
     }
 }
