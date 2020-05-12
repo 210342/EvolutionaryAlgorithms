@@ -29,6 +29,17 @@ namespace Evo.Simulation.Interfaces
             .Select(i => RNG.NextDouble() * (maxValue - minValue) + minValue)
             .ToArray();
 
+        (int, int) GetRandomPair(int min, int max)
+        {
+            int r1 = RNG.Next(min, max);
+            int r2 = RNG.Next(min, max);
+            while (r1 == r2)
+            {
+                r1 = RNG.Next(min, max);
+            }
+            return (r1, r2);
+        }
+
         void IterateEpoch();
     }
 }

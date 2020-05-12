@@ -2,11 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Evo.ParticleSwarm</RootNamespace>
+    <RootNamespace>Evo.ButterflyOptimisation</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ButterflyOptimisation\ButterflyOptimisation.csproj" />
     <ProjectReference Include="..\Simulation\Simulation.csproj" />
   </ItemGroup>
 

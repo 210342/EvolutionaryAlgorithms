@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simulation", "Simulation\Si
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvoApp", "EvoApp\EvoApp.csproj", "{82E7B782-EEC0-4BD0-8DF9-57C6FCF29D43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ButterflyOptimisation", "ButterflyOptimisation\ButterflyOptimisation.csproj", "{583B355B-FEA1-440A-B1A4-85C59DEB36FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{82E7B782-EEC0-4BD0-8DF9-57C6FCF29D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82E7B782-EEC0-4BD0-8DF9-57C6FCF29D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82E7B782-EEC0-4BD0-8DF9-57C6FCF29D43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{583B355B-FEA1-440A-B1A4-85C59DEB36FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{583B355B-FEA1-440A-B1A4-85C59DEB36FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{583B355B-FEA1-440A-B1A4-85C59DEB36FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{583B355B-FEA1-440A-B1A4-85C59DEB36FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

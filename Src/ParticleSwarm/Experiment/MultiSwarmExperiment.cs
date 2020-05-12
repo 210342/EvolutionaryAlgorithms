@@ -10,53 +10,53 @@ using System.Threading.Tasks;
 
 namespace Evo.ParticleSwarm.Experiment
 {
-    public class MultiSwarmExperiment : Experiment<Particle, IPopulation<Particle>, SwarmConfig>
+    public class MultiSwarmExperiment : Experiment<Particle, IPopulation<Particle>, MultiSwarmConfig>
     {
         public MultiSwarmExperiment(ILogger logger) : base(logger) { }
 
-        public override async Task Run(SwarmConfig config, StreamWriter output, (int, Function) functionTuple)
+        public override async Task Run(MultiSwarmConfig config, StreamWriter output, (int, Function) functionTuple)
         {
             int functionIndex = functionTuple.Item1;
             Function function = functionTuple.Item2;
 
-            var mpsoParams = new SwarmParameters(config.SwarmParameters)
+            var mpsoParams = new SwarmParameters(config.SwarmConfig.SwarmParameters)
             {
                 SwarmPermutePeriod = 8
             };
-            var mspsoParams = new SwarmParameters(config.SwarmParameters)
+            var mspsoParams = new SwarmParameters(config.SwarmConfig.SwarmParameters)
             {
                 UseEliteParticles = true
             };
 
             var mpsoMetrics = new List<IDictionary<string, IList<double[]>>>();
             var mspsoMetrics = new List<IDictionary<string, IList<double[]>>>();
-            for (uint populationSize = config.ExperimentParameters.Min.PopulationSize;
-                populationSize <= config.ExperimentParameters.Max.PopulationSize;
-                populationSize += config.ExperimentParameters.Rate.PopulationSize)
+            for (uint populationSize = config.SwarmConfig.ExperimentParameters.Min.PopulationSize;
+                populationSize <= config.SwarmConfig.ExperimentParameters.Max.PopulationSize;
+                populationSize += config.SwarmConfig.ExperimentParameters.Rate.PopulationSize)
             {
                 Logger.Print($"Population {populationSize}");
                 mpsoParams.PopulationSize = populationSize;
                 mspsoParams.PopulationSize = populationSize;
 
-                await output.WriteLineAsync($"MPSO;function: ;{functionIndex};Population: ;{populationSize}; Experiments: ;{config.ExperimentsCount}");
-                for (int i = 0; i < config.ExperimentsCount; ++i)
+                await output.WriteLineAsync($"MPSO;function: ;{functionIndex};Population: ;{populationSize}; Experiments: ;{config.SwarmConfig.ExperimentsCount}");
+                for (int i = 0; i < config.SwarmConfig.ExperimentsCount; ++i)
                 {
                     MultiSwarmUniverse universe = new MultiSwarmUniverse(mpsoParams, function.UniverseSize, (function.Evaluate, function.Fitness));
                     new Simulation<Particle>().Run(
                         universe,
-                        StopConditions[config.SwarmParameters.StopCondition]
+                        StopConditions[config.SwarmConfig.SwarmParameters.StopCondition]
                     );
                     mpsoMetrics.Add(universe.Metrics);
                 }
                 await PrintMetrics(output, mpsoMetrics);
 
-                await output.WriteLineAsync($"MSPSO;function: ;{functionIndex};Population: ;{populationSize}; Experiments: ;{config.ExperimentsCount}");
-                for (int i = 0; i < config.ExperimentsCount; ++i)
+                await output.WriteLineAsync($"MSPSO;function: ;{functionIndex};Population: ;{populationSize}; Experiments: ;{config.SwarmConfig.ExperimentsCount}");
+                for (int i = 0; i < config.SwarmConfig.ExperimentsCount; ++i)
                 {
                     MultiSwarmUniverse universe = new MultiSwarmUniverse(mspsoParams, function.UniverseSize, (function.Evaluate, function.Fitness));
                     new Simulation<Particle>().Run(
                         universe,
-                        StopConditions[config.SwarmParameters.StopCondition]
+                        StopConditions[config.SwarmConfig.SwarmParameters.StopCondition]
                     );
                     mspsoMetrics.Add(universe.Metrics);
                 }

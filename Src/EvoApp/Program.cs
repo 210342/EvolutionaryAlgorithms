@@ -24,14 +24,14 @@ namespace Evo.EvoApp
             {
                 swarmConfigFilename = args[0];
             }
-            SwarmConfig swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmConfigFilename));
+            MultiSwarmConfig config = JsonSerializer.Deserialize<MultiSwarmConfig>(File.ReadAllText(swarmConfigFilename));
             for (int i = 0; i < SwarmExperiment.Functions.Length; ++i)
             {
                 using FileStream stream = new FileStream($"ResultsMulti_{i}.csv", FileMode.Create);
                 using StreamWriter writer = new StreamWriter(stream);
-                writer.WriteLine($"NULL;{swarmConfig.SwarmParameters};NULL;NULL;NULL;NULL;NULL");
+                writer.WriteLine($"NULL;{config.SwarmConfig.SwarmParameters};NULL;NULL;NULL;NULL;NULL");
                 writer.WriteLine();
-                await new MultiSwarmExperiment(new Logger()).Run(swarmConfig, writer, (i, SwarmExperiment.Functions[i]));
+                await new MultiSwarmExperiment(new Logger()).Run(config, writer, (i, SwarmExperiment.Functions[i]));
             }
         }
 
