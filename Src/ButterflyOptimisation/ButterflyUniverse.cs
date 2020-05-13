@@ -18,7 +18,10 @@ namespace Evo.ButterflyOptimisation
             BoaParameters parameters,
             Simulation.Range[] size,
             (Func<double[], double>, Func<double, double, bool>) functions) 
-            : base(size, parameters.MaxEpoch, parameters.MinAccuracy, functions)
+            : base(size, 
+                  parameters.MaxEpoch, 
+                  parameters.MinAccuracy, 
+                  functions)
         {
             Parameters = parameters;
             Swarm = new Swarm(this, parameters);

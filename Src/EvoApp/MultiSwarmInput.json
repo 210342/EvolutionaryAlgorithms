@@ -7,15 +7,23 @@
     "FunctionIndex": 1,
     "ExperimentsCount": 16,
     "BoaParameters": {
-
+      "SubPopulationCount": 4,
+      "PopulationSize": 32,
+      "MaxEpoch": 128,
+      "StopCondition": "Iterations",
+      "MinAccuracy": 0.001,
+      "SensorModality": 0.1,
+      "PowerExponent": 0.2,
+      "SwitchProbability": 0.8,
+      "SwarmPermutePeriod":  4
     },
     "BoaExperimentParameters": {
       "Min": {
         "SubPopulationCount": 2,
         "PopulationSize": 32,
-        "MaxEpoch": 32,
-        "SensorModality": 0.8,
-        "PowerExponent": 0.8,
+        "MaxEpoch": 64,
+        "SensorModality": 0.1,
+        "PowerExponent": 0.1,
         "SwitchProbability": 0.5,
         "SwarmPermutePeriod": 4
       },
@@ -31,9 +39,9 @@
       "Max": {
         "SubSwarmCount": 8,
         "PopulationSize": 64,
-        "MaxEpoch": 64,
-        "SensorModality": 1.05,
-        "PowerExponent": 1.05,
+        "MaxEpoch": 128,
+        "SensorModality": 0.35,
+        "PowerExponent": 0.35,
         "SwitchProbability": 0.76,
         "SwarmPermutePeriod": 8
       }
@@ -46,14 +54,13 @@
     "SwarmParameters": {
       "SubSwarmCount": 4,
       "PopulationSize": 32,
-      "MaxEpoch": 64,
+      "MaxEpoch": 128,
       "StopCondition": "Iterations",
       "MinAccuracy": 0.001,
       "ParticleChangeRate": 1.8,
       "ParticleChangeAddend": 0,
       "SwarmChangeRate": 1.2,
       "SwarmChangeAddend": 0,
-      "SwarmPermutePeriod": 4,
       "DecelerationRate": 1,
       "InertiaWeight": 0.8,
       "InertiaWeightRate": 1,
@@ -63,7 +70,7 @@
       "Min": {
         "SubSwarmCount": 2,
         "PopulationSize": 32,
-        "MaxEpoch": 32,
+        "MaxEpoch": 128,
         "ParticleChangeRate": 0.1,
         "ParticleChangeAddend": -0.1,
         "SwarmChangeRate": 0.1,
@@ -77,7 +84,7 @@
       "Rate": {
         "SubSwarmCount": 2,
         "PopulationSize": 32,
-        "MaxEpoch": 32,
+        "MaxEpoch": 64,
         "ParticleChangeRate": 0.1,
         "ParticleChangeAddend": 0.01,
         "SwarmChangeRate": 0.1,
@@ -91,7 +98,7 @@
       "Max": {
         "SubSwarmCount": 8,
         "PopulationSize": 64,
-        "MaxEpoch": 64,
+        "MaxEpoch": 256,
         "ParticleChangeRate": 4.0,
         "ParticleChangeAddend": 0.0,
         "SwarmChangeRate": 4.0,

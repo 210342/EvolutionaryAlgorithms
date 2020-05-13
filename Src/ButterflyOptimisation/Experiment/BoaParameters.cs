@@ -12,5 +12,16 @@ namespace Evo.ButterflyOptimisation.Experiment
         public double SwitchProbability { get; set; }
         public int SubPopulationCount { get; set; }
         public int SwarmPermutePeriod { get; set; } = 1;
+
+        public BoaParameters() { }
+
+        public BoaParameters(BoaParameters other) : base(other)
+        {
+            SensorModality = other.SensorModality;
+            PowerExponent = other.PowerExponent;
+            SwitchProbability = other.SwitchProbability;
+            SubPopulationCount = other.SubPopulationCount;
+            SwarmPermutePeriod = other.SwarmPermutePeriod;
+        }
     }
 }

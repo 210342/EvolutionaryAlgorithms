@@ -14,7 +14,7 @@ namespace Evo.ButterflyOptimisation
 
         public BoaParameters Parameters { get; set; }
         public override object Result => _swarms.Aggregate((s1, s2) =>
-                Universe.FitnessFunction((double)s1.Result, (double)s2.Result) ? s1 : s2).Result;
+                Universe.FitnessFunction(s1.BestFitness, s2.BestFitness) ? s1 : s2).Result;
 
         public Swarm(IUniverse<IPopulation<Butterfly>, Butterfly> universe, BoaParameters parameters)
             : base(

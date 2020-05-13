@@ -9,6 +9,8 @@ namespace Evo.Simulation.Interfaces
         uint Epoch { get; }
         object Result { get; }
         OrganismType[] Organisms { get; }
+        double PreviousEpochFitness { get; }
+        double Fitness { get; }
 
         void Evolve();
         bool CanEvolve();

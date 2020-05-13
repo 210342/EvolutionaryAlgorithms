@@ -17,7 +17,8 @@ namespace Evo.ButterflyOptimisation
             BestButterfly = Organisms.Aggregate((b1, b2) => Universe.FitnessFunction(b1.Result, b2.Result) ? b1 : b2);
         }
 
-        public override object Result => BestButterfly.Result;
+        public override object Result => BestButterfly.Position;
+        internal double BestFitness => BestButterfly.Result;
 
         public override void Evolve()
         {

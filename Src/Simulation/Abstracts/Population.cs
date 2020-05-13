@@ -1,4 +1,5 @@
 ﻿using Evo.Simulation.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,6 +13,8 @@ namespace Evo.Simulation.Abstracts
         public int PopulationSize => Organisms.Length;
         public uint Epoch { get; protected set; } = 0;
 
+        public double PreviousEpochFitness { get; private set; }
+        public double Fitness => Universe.ApproximatedFunction(Result as double[]);
         public abstract object Result { get; }
 
         protected Population(IUniverse<IPopulation<OrganismType>, OrganismType> universe)
@@ -27,6 +30,7 @@ namespace Evo.Simulation.Abstracts
 
         public virtual void Evolve()
         {
+            PreviousEpochFitness = Universe.ApproximatedFunction(Result as double[]);
             ++Epoch;
         }
 

@@ -11,7 +11,8 @@ namespace Evo.Simulation.Abstracts
         where PopulationType : IPopulation<OrganismType>
     {
         public static readonly string ACCURACY_RANGE_KEY = "Accuracy range";
-        public static readonly string MEAN_ACCURACY_KEY = "Mean accuracy";
+        public static readonly string BEST_ACCURACY_KEY = "Best accuracy";
+        public static readonly string FITNESS_CHANGE_KEY = "Fitness change";
 
         public Random RNG { get; } = new Random();
         public Range[] Size { get; }
@@ -39,6 +40,7 @@ namespace Evo.Simulation.Abstracts
             FitnessFunction = functions.Item2;
             EpochElapsed += AccuracyRangeMetric;
             EpochElapsed += MeanAccuracyMetric;
+            EpochElapsed += FitnessChangeMetric;
         }
 
         public virtual void IterateEpoch()
@@ -49,11 +51,11 @@ namespace Evo.Simulation.Abstracts
 
         private void AccuracyRangeMetric(Universe<OrganismType, PopulationType> universe)
         {
-            if (!Metrics.ContainsKey(MEAN_ACCURACY_KEY))
+            if (!Metrics.ContainsKey(BEST_ACCURACY_KEY))
             {
-                Metrics.Add(MEAN_ACCURACY_KEY, new List<double[]>());
+                Metrics.Add(BEST_ACCURACY_KEY, new List<double[]>());
             }
-            Metrics[MEAN_ACCURACY_KEY].Add(new[] { ApproximatedFunction(Population.Result as double[]) });
+            Metrics[BEST_ACCURACY_KEY].Add(new[] { ApproximatedFunction(Population.Result as double[]) });
         }
 
         private void MeanAccuracyMetric(Universe<OrganismType, PopulationType> universe)
@@ -65,6 +67,15 @@ namespace Evo.Simulation.Abstracts
             double min = Population.Organisms.Aggregate((p1, p2) => FitnessFunction(p1.Result, p2.Result) ? p1 : p2).Result;
             double max = Population.Organisms.Aggregate((p1, p2) => FitnessFunction(p1.Result, p2.Result) ? p2 : p1).Result;
             Metrics[ACCURACY_RANGE_KEY].Add(new[] { min, max });
+        }
+
+        private void FitnessChangeMetric(Universe<OrganismType, PopulationType> universe)
+        {
+            if (!Metrics.ContainsKey(FITNESS_CHANGE_KEY))
+            {
+                Metrics.Add(FITNESS_CHANGE_KEY, new List<double[]>());
+            }
+            Metrics[FITNESS_CHANGE_KEY].Add(new[] { Math.Abs(Population.Fitness - Population.PreviousEpochFitness) });
         }
     }
 }

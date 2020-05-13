@@ -19,6 +19,10 @@ namespace Evo.Simulation.GaSimulation
 
 		public GaOrganism[] Organisms => base.CurrentGeneration.Chromosomes.OfType<GaOrganism>().ToArray();
 
+		public double PreviousEpochFitness => 0;
+
+		public double Fitness => 0;
+
 		public bool CanEvolve()
 		{
 			throw new NotImplementedException();

@@ -41,11 +41,12 @@ namespace Evo.ButterflyOptimisation
         private Butterfly Evolve(SubSwarm swarm)
         {
             double r = _universe.RNG.NextDouble();
+            double fragrance = Fragrance;
             if (r < Parameters.SwitchProbability)
             {
                 for (int i = 0; i < Position.Length; ++i)
                 {
-                    Position[i] += Fragrance * (r * r * swarm.BestButterfly.Position[i] - Position[i]);
+                    Position[i] += fragrance * (r * r * swarm.BestButterfly.Position[i] - Position[i]);
                 }
             }
             else
@@ -53,7 +54,7 @@ namespace Evo.ButterflyOptimisation
                 var randomPair = _universe.GetRandomPair(0, swarm.Organisms.Length);
                 for (int i = 0; i < Position.Length; ++i)
                 {
-                    Position[i] += Fragrance *
+                    Position[i] += fragrance *
                         (r * r * swarm.Organisms[randomPair.Item1].Position[i]
                             - swarm.Organisms[randomPair.Item2].Position[i]);
                 }
