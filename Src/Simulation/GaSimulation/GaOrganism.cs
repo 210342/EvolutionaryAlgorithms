@@ -12,6 +12,8 @@ namespace Evo.Simulation.GaSimulation
 
 		}
 
+		public double Result => Fitness ?? 0;
+
 		public override IChromosome CreateNew()
 		{
 			throw new NotImplementedException();

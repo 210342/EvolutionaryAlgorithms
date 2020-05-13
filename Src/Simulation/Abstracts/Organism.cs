@@ -6,6 +6,8 @@ namespace Evo.Simulation.Abstracts
     public abstract class Organism<OrganismType> : IOrganism<OrganismType, IPopulation<OrganismType>>
         where OrganismType : Organism<OrganismType>
     {
+        public abstract double Result { get; }
+
         public Organism(IUniverse<IPopulation<OrganismType>, OrganismType> universe)
         {
             InitialiseRandomly(universe);

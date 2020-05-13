@@ -6,6 +6,7 @@ namespace Evo.Simulation.Interfaces
         where OrganismType : IOrganism<OrganismType, IPopulation<OrganismType>> 
         where PopulationType : IPopulation<OrganismType>
     {
+        double Result { get; }
         OrganismType Evolve();
         OrganismType Evolve(OrganismType other);
         OrganismType Evolve(IEnumerable<OrganismType> others);

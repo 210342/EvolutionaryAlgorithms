@@ -1,5 +1,6 @@
 ﻿using Evo.Simulation;
 using Evo.Simulation.GaSimulation;
+using Evo.Simulation.Interfaces;
 using Evo.Simulation.SimulationExperiment;
 using GeneticSharp.Domain;
 using GeneticSharp.Domain.Chromosomes;
@@ -21,7 +22,7 @@ namespace Evo.ParticleSwarm.Experiment
     {
         private SwarmConfig _swarm;
 
-        public GaComparisonExperiment(SwarmConfig swarm)
+        public GaComparisonExperiment(ILogger logger, SwarmConfig swarm) : base(logger)
         {
             _swarm = swarm;
         }

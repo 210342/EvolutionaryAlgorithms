@@ -14,15 +14,38 @@ namespace Evo.EvoApp
     {
         static async Task Main(string[] args)
         {
-            string swarmCOnfigFilename = "SwarmInput.json";
+            await MPSO(args);
+        }
+
+        public static async Task MPSO(string[] args)
+        {
+            string swarmConfigFilename = "MultiSwarmInput.json";
+            if (args.Length > 0)
+            {
+                swarmConfigFilename = args[0];
+            }
+            MultiSwarmConfig config = JsonSerializer.Deserialize<MultiSwarmConfig>(File.ReadAllText(swarmConfigFilename));
+            for (int i = 0; i < SwarmExperiment.Functions.Length; ++i)
+            {
+                using FileStream stream = new FileStream($"ResultsMulti_{i}.csv", FileMode.Create);
+                using StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine($"NULL;{config.SwarmConfig.SwarmParameters};NULL;NULL;NULL;NULL;NULL");
+                writer.WriteLine();
+                await new MultiSwarmExperiment(new Logger()).Run(config, writer, (i, SwarmExperiment.Functions[i]));
+            }
+        }
+
+        public static async Task PSO(string[] args)
+        {
+            string swarmConfigFilename = "SwarmInput.json";
             string gaConfigFilename = "GaInput.json";
             if (args.Length > 0)
             {
-                swarmCOnfigFilename = args[0];
+                swarmConfigFilename = args[0];
             }
-            SwarmConfig swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmCOnfigFilename));
+            SwarmConfig swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmConfigFilename));
             if (File.Exists(gaConfigFilename))
-            { 
+            {
                 GaConfig gaConfig = JsonSerializer.Deserialize<GaConfig>(File.ReadAllText(gaConfigFilename));
                 if (gaConfig != null)
                 {
@@ -30,7 +53,7 @@ namespace Evo.EvoApp
                     using FileStream stream = new FileStream($"Simulation_function{gaConfig.FunctionIndex}.csv", FileMode.Create);
                     using StreamWriter writer = new StreamWriter(stream);
                     writer.WriteLine("FunctionIndex;PopulationSize;MaxEpochs;Time;Result;ResultFitness;Error;ActualEpochs;ActualAccuracy");
-                    var experiment = new GaComparisonExperiment(swarmConfig);
+                    var experiment = new GaComparisonExperiment(new Logger(), swarmConfig);
                     await experiment.Run(gaConfig, writer, (gaConfig.FunctionIndex, function));
                 }
             }
@@ -59,14 +82,15 @@ namespace Evo.EvoApp
                         using StreamWriter writer = new StreamWriter(stream);
                         writer.WriteLine("FunctionIndex;PopulationSize;MaxEpochs;StopCondition;MinAccuracy;ParticleChangeRate;ParticleChangeAddend;SwarmChangeRate;SwarmChangeAddend;DecelerationRate;InertiaWeight;InertiaWeightRate;InertiaWeightAddend;Time;Result;Error;ActualEpochs;ActualAccuracy");
                         writer.WriteLine($"NULL;{swarmConfig.SwarmParameters};NULL;NULL;NULL;NULL;NULL");
-                        swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmCOnfigFilename));
+                        swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmConfigFilename));
                         await new SwarmExperiment(new Logger()).Run(swarmConfig, writer, (i, SwarmExperiment.Functions[i]));
-                        swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmCOnfigFilename));
+                        swarmConfig = JsonSerializer.Deserialize<SwarmConfig>(File.ReadAllText(swarmConfigFilename));
                         swarmConfig.SwarmParameters.StopCondition = "Accuracy";
                         await new SwarmExperiment(new Logger()).Run(swarmConfig, writer, (i, SwarmExperiment.Functions[i]));
                     }
                 }
             }
+
         }
     }
 }

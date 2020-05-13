@@ -1,6 +1,7 @@
 ﻿using GeneticSharp.Domain.Chromosomes;
 using GeneticSharp.Domain.Populations;
 using System;
+using System.Linq;
 
 namespace Evo.Simulation.GaSimulation
 {
@@ -15,6 +16,12 @@ namespace Evo.Simulation.GaSimulation
 		public uint Epoch { get; set; } = 0;
 
 		public object Result => BestChromosome;
+
+		public GaOrganism[] Organisms => base.CurrentGeneration.Chromosomes.OfType<GaOrganism>().ToArray();
+
+		public double PreviousEpochFitness => 0;
+
+		public double Fitness => 0;
 
 		public bool CanEvolve()
 		{

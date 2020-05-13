@@ -11,6 +11,13 @@ namespace Evo.Simulation.SimulationExperiment
         where OrganismType : IOrganism<OrganismType, IPopulation<OrganismType>>
         where PopulationType : IPopulation<OrganismType>
     {
+        public ILogger Logger { get; set; }
+
+        public Experiment(ILogger logger)
+        {
+            Logger = logger;
+        }
+
         public static Function[] Functions { get; } = new Function[]
         {
             new Function(

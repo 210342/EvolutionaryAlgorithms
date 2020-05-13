@@ -8,7 +8,7 @@ namespace Evo.Simulation.SimulationExperiment
     {
         public object ReturnedValue { get; set; }
         public uint Epochs { get; set; }
-        public double Accuracy { get; set; }
+        public double? Accuracy { get; set; }
         public long ElapsedMilliseconds { get; set; }
     }
 }

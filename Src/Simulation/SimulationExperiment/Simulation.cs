@@ -15,7 +15,7 @@ namespace Evo.Simulation.SimulationExperiment
             timer.Start();
             do
             {
-                universe.Population.Evolve();
+                universe.IterateEpoch();
             }
             while (!stopCondition(universe));
             timer.Stop();

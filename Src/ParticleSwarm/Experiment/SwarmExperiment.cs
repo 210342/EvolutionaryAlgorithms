@@ -12,12 +12,7 @@ namespace Evo.ParticleSwarm.Experiment
 {
     public class SwarmExperiment : Experiment<Particle, IPopulation<Particle>, SwarmConfig>
     {
-        public ILogger Logger { get; set; }
-
-        public SwarmExperiment(ILogger logger)
-        {
-            Logger = logger;
-        }
+        public SwarmExperiment(ILogger logger) : base(logger) { }
 
         public override async Task Run(SwarmConfig config, StreamWriter output, (int, Function) functionTuple)
         {

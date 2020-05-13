@@ -14,7 +14,7 @@ namespace Evo.Simulation.Interfaces
         PopulationType Population { get; }
         uint Epoch { get; }
         uint MaxEpoch { get; }
-        double Accuracy { get; }
+        double? Accuracy { get; }
         double MinAccuracy { get; }
 
         double[] GenerateRandomVector() => Enumerable.Range(0, Size.Length)
@@ -28,5 +28,18 @@ namespace Evo.Simulation.Interfaces
         double[] GenerateRandomVector(double minValue, double maxValue) => Enumerable.Range(0, Size.Length)
             .Select(i => RNG.NextDouble() * (maxValue - minValue) + minValue)
             .ToArray();
+
+        (int, int) GetRandomPair(int min, int max)
+        {
+            int r1 = RNG.Next(min, max);
+            int r2 = RNG.Next(min, max);
+            while (r1 == r2)
+            {
+                r1 = RNG.Next(min, max);
+            }
+            return (r1, r2);
+        }
+
+        void IterateEpoch();
     }
 }
