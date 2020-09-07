@@ -1,6 +1,8 @@
 ﻿using Evo.Simulation.SimulationExperiment;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Evo.ParticleSwarm.Experiment
@@ -23,22 +25,15 @@ namespace Evo.ParticleSwarm.Experiment
 
         public SwarmParameters(SwarmParameters other) : base(other)
         {
-            ParticleChangeRate = other.ParticleChangeRate;
-            ParticleChangeAddend = other.ParticleChangeAddend;
-            SwarmPermutePeriod = other.SwarmPermutePeriod;
-            SubSwarmCount = other.SubSwarmCount;
-            SwarmChangeRate = other.SwarmChangeRate;
-            SwarmChangeAddend = other.SwarmChangeAddend;
-            DecelerationRate = other.DecelerationRate;
-            InertiaWeight = other.InertiaWeight;
-            InertiaWeightRate = other.InertiaWeightRate;
-            InertiaWeightAddend = other.InertiaWeightAddend;
-            UseEliteParticles = other.UseEliteParticles;
+            foreach (PropertyInfo prop in typeof(SwarmParameters).GetProperties())
+            {
+                prop.SetValue(this, prop.GetValue(other));
+            }
         }
 
         public override string ToString()
         {
-            return $"{base.ToString()};{ParticleChangeRate};{ParticleChangeAddend};{SwarmChangeRate};{SwarmChangeAddend};{DecelerationRate};{InertiaWeight};{InertiaWeightRate};{InertiaWeightAddend};{SubSwarmCount};{SwarmPermutePeriod};{UseEliteParticles}";
+            return string.Join(";", typeof(SwarmParameters).GetProperties().Select(p => p.GetValue(this)));
         }
     }
 }

@@ -1,0 +1,62 @@
+{
+  "GaConfig": {
+    "ExperimentsCount": 32,
+    "InputParameters": {
+      "PopulationSize": 16,
+      "MaxEpoch": 128,
+      "StopCondition": "Iterations",
+      "MinAccuracy": 0.001
+    },
+    "ExperimentParameters": {
+      "MinPopulation": 16,
+      "MinEpoch": 16,
+      "PopulationRate": 16,
+      "EpochRate": 16,
+      "MaxPopulation": 16,
+      "MaxEpoch": 16
+    }
+  },
+  "BoaConfig": {
+    "ExperimentsCount": 32,
+    "BoaParameters": {
+      "SubPopulationCount": 8,
+      "PopulationSize": 32,
+      "MaxEpoch": 64,
+      "StopCondition": "Iterations",
+      "MinAccuracy": 0.001,
+      "SensorModality": 0.03,
+      "PowerExponent": 0.25,
+      "SwitchProbability": 0.8,
+      "SwarmPermutePeriod": 8
+    },
+    "BoaExperimentParameters": {
+      "Min": {
+        "SubPopulationCount": 2,
+        "PopulationSize": 32,
+        "MaxEpoch": 64,
+        "SensorModality": 0.01,
+        "PowerExponent": 0.1,
+        "SwitchProbability": 0.6,
+        "SwarmPermutePeriod": 4
+      },
+      "Rate": {
+        "SubSwarmCount": 2,
+        "PopulationSize": 32,
+        "MaxEpoch": 32,
+        "SensorModality": 0.05,
+        "PowerExponent": 0.1,
+        "SwitchProbability": 0.1,
+        "SwarmPermutePeriod": 4
+      },
+      "Max": {
+        "SubSwarmCount": 8,
+        "PopulationSize": 64,
+        "MaxEpoch": 128,
+        "SensorModality": 0.21,
+        "PowerExponent": 0.31,
+        "SwitchProbability": 0.81,
+        "SwarmPermutePeriod": 8
+      }
+    }
+  }
+}

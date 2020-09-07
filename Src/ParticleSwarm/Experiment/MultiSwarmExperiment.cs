@@ -31,9 +31,9 @@ namespace Evo.ParticleSwarm.Experiment
             };
             var boaParams = new BoaParameters(config.BoaConfig.BoaParameters);
 
-            var mpsoMetrics = new List<IDictionary<string, IList<double[]>>>();
-            var mspsoMetrics = new List<IDictionary<string, IList<double[]>>>();
-            var boaMetrics = new List<IDictionary<string, IList<double[]>>>();
+            var mpsoMetrics = new List<IDictionary<MetricsEnum, IList<double[]>>>();
+            var mspsoMetrics = new List<IDictionary<MetricsEnum, IList<double[]>>>();
+            var boaMetrics = new List<IDictionary<MetricsEnum, IList<double[]>>>();
             IList<long> times = new List<long>();
             for (uint populationSize = config.SwarmConfig.ExperimentParameters.Min.PopulationSize;
                 populationSize <= config.SwarmConfig.ExperimentParameters.Max.PopulationSize;
@@ -223,55 +223,6 @@ namespace Evo.ParticleSwarm.Experiment
                 times.Clear();
             }
             boaParams.PowerExponent = original;
-        }
-
-        private IEnumerable<double> MeanByIndex(IEnumerable<IList<double[]>> metric)
-        {
-            IList<double> result = new List<double>();
-            for (int i = 0; i < metric.FirstOrDefault().Count; ++i)
-            {
-                double sum = 0;
-
-                foreach (var list in metric)
-                {
-                    if (!double.IsNaN(list[i][0]))
-                    {
-                        sum += list[i][0];
-                    }
-                }
-
-                result.Add(sum / metric.FirstOrDefault().Count);
-            }
-            return result;
-        }
-
-        private async Task PrintMetrics(StreamWriter output, List<IDictionary<string, IList<double[]>>>metrics)
-        {
-            await output.WriteLineAsync();
-            await output.WriteAsync("Iterations;");
-            await output.WriteLineAsync(string.Join(';', Enumerable.Range(1, 1 + metrics[0][MultiSwarmUniverse.ACCURACY_RANGE_KEY].Count)));
-            await output.WriteAsync("Minimum accuracy;");
-            await output.WriteLineAsync(string.Join(';', metrics[0][MultiSwarmUniverse.ACCURACY_RANGE_KEY].Select(d => d[0])));
-            await output.WriteAsync("Maximum accuracy;");
-            await output.WriteLineAsync(string.Join(';', metrics[0][MultiSwarmUniverse.ACCURACY_RANGE_KEY].Select(d => d[1])));
-            await output.WriteLineAsync();
-            await output.WriteAsync("Iterations;");
-            await output.WriteLineAsync(string.Join(';', Enumerable.Range(1, 1 + metrics[0][MultiSwarmUniverse.BEST_ACCURACY_KEY].Count)));
-            await output.WriteAsync("Mean accuracy;");
-            await output.WriteLineAsync(string.Join(';', MeanByIndex(metrics.Select(d => d[MultiSwarmUniverse.BEST_ACCURACY_KEY]))));
-            await output.WriteLineAsync();
-            await output.WriteAsync("Iterations;");
-            await output.WriteLineAsync(string.Join(';', Enumerable.Range(1, 1 + metrics[0][MultiSwarmUniverse.FITNESS_CHANGE_KEY].Count)));
-            await output.WriteAsync("Absolute fitness change between iterations;");
-            await output.WriteLineAsync(string.Join(';', MeanByIndex(metrics.Select(d => d[MultiSwarmUniverse.FITNESS_CHANGE_KEY]))));
-            await output.WriteLineAsync();
-        }
-
-        private async Task PrintAverageTime(StreamWriter output, IList<long> times)
-        {
-            await output.WriteLineAsync();
-            await output.WriteLineAsync($"Average time execution [ms]: {times.Average()}");
-            await output.WriteLineAsync();
         }
     }
 }

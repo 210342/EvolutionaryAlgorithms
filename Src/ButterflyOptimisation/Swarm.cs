@@ -29,6 +29,14 @@ namespace Evo.ButterflyOptimisation
             CreateSubSwarms(Organisms);
         }
 
+        public Swarm(IUniverse<IPopulation<Butterfly>, Butterfly> universe, BoaParameters parameters, double[][] templateParticles) 
+            : base(universe)
+        {
+            Parameters = parameters;
+            CreateSubSwarms(templateParticles);
+            Organisms = _swarms.SelectMany(s => s.Organisms).ToArray();
+        }
+
         private void CreateSubSwarms(IEnumerable<Butterfly> organisms)
         {
             _swarms = Enumerable.Range(0, Parameters.SubPopulationCount)
@@ -38,6 +46,19 @@ namespace Evo.ButterflyOptimisation
                         .Skip(i * (int)Parameters.PopulationSize)
                         .Take((int)Parameters.PopulationSize)
                         .ToArray()
+                ))
+                .ToArray();
+        }
+
+        private void CreateSubSwarms(double[][] templateParticles)
+        {
+            _swarms = templateParticles
+                .Select(templatePosition =>
+                    new SubSwarm(
+                    Universe,
+                    Enumerable.Range(0, (int)Parameters.PopulationSize - 1)
+                        .Select(i => new Butterfly(Universe, Parameters))
+                        .Concat(new[] { new Butterfly(Universe, Parameters, templatePosition) })
                 ))
                 .ToArray();
         }

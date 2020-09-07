@@ -26,6 +26,19 @@ namespace Evo.ButterflyOptimisation
             Parameters = parameters;
             Swarm = new Swarm(this, parameters);
         }
+        public ButterflyUniverse(
+            BoaParameters parameters,
+            Simulation.Range[] size,
+            (Func<double[], double>, Func<double, double, bool>) functions,
+            double[][] templateParticles)
+            : base(size,
+                  parameters.MaxEpoch,
+                  parameters.MinAccuracy,
+                  functions)
+        {
+            Parameters = parameters;
+            Swarm = new Swarm(this, parameters, templateParticles);
+        }
 
         public override void IterateEpoch()
         {
