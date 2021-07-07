@@ -14,7 +14,25 @@ namespace Evo.EvoApp
     {
         static async Task Main(string[] args)
         {
-            await MPSO(args);
+            await Mixed(args);
+        }
+
+        public static async Task Mixed(string[] args)
+        {
+            string configFilename = "MixedConfig.json";
+            if (args.Length > 0)
+            {
+                configFilename = args[0];
+            }
+            MixedConfig config = JsonSerializer.Deserialize<MixedConfig>(File.ReadAllText(configFilename));
+            for (int i = 0; i < MixedExperiment.Functions.Length; ++i)
+            {
+                using FileStream stream = new FileStream($"ResultsMixed_{i}.csv", FileMode.Create);
+                using StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine($"NULL;{config.BoaConfig.BoaParameters};NULL;NULL;NULL;NULL;NULL");
+                writer.WriteLine();
+                await new MixedExperiment(new Logger()).Run(config, writer, (i, MixedExperiment.Functions[i]));
+            }
         }
 
         public static async Task MPSO(string[] args)

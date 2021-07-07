@@ -25,6 +25,13 @@ namespace Evo.ButterflyOptimisation
             Parameters = parameters;
         }
 
+        public Butterfly(IUniverse<IPopulation<Butterfly>, Butterfly> universe, BoaParameters parameters, double[] startingPosition) 
+            : this(universe, parameters)
+        {
+            Position = new double[startingPosition.Length];
+            startingPosition.CopyTo(Position.AsSpan());
+        }
+
         protected override void InitialiseRandomly(IUniverse<IPopulation<Butterfly>, Butterfly> universe)
         {
             Position = universe.GenerateRandomVector();

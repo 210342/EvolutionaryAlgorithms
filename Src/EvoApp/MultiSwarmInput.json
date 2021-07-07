@@ -5,7 +5,7 @@
   "BoaConfig": {
     "SingleSimulation": false,
     "FunctionIndex": 1,
-    "ExperimentsCount": 16,
+    "ExperimentsCount": 32,
     "BoaParameters": {
       "SubPopulationCount": 4,
       "PopulationSize": 32,
@@ -22,27 +22,27 @@
         "SubPopulationCount": 2,
         "PopulationSize": 32,
         "MaxEpoch": 64,
-        "SensorModality": 0.1,
+        "SensorModality": 0.01,
         "PowerExponent": 0.1,
-        "SwitchProbability": 0.5,
+        "SwitchProbability": 0.6,
         "SwarmPermutePeriod": 4
       },
       "Rate": {
         "SubSwarmCount": 2,
         "PopulationSize": 32,
         "MaxEpoch": 32,
-        "SensorModality": 0.1,
+        "SensorModality": 0.05,
         "PowerExponent": 0.1,
-        "SwitchProbability": 0.25,
+        "SwitchProbability": 0.1,
         "SwarmPermutePeriod": 4
       },
       "Max": {
         "SubSwarmCount": 8,
         "PopulationSize": 64,
         "MaxEpoch": 128,
-        "SensorModality": 0.35,
-        "PowerExponent": 0.35,
-        "SwitchProbability": 0.76,
+        "SensorModality": 0.21,
+        "PowerExponent": 0.31,
+        "SwitchProbability": 0.81,
         "SwarmPermutePeriod": 8
       }
     }
