@@ -80,13 +80,13 @@ namespace Evo.ParticleSwarm
         private Particle EvolveByVelocity(Swarm swarm)
         {
             // update velocity
-            double[] cognitive = swarm.Universe.GenerateRandomVector(ChangeRate);
-            double[] social = swarm.Universe.GenerateRandomVector(swarm.ChangeRate);
+            double cognitive = swarm.Universe.RNG.NextDouble() * ChangeRate;
+            double social = swarm.Universe.RNG.NextDouble() * swarm.ChangeRate;
             for (int i = 0; i < Velocity.Length; ++i)
             {
                 Velocity[i] = Velocity[i] * InertiaWeight
-                    + cognitive[i] * (BestPosition[i] - Position[i])
-                    + social[i] * (swarm.BestPosition[i] - Position[i]);
+                    + cognitive * (BestPosition[i] - Position[i])
+                    + social * (swarm.BestPosition[i] - Position[i]);
             }
 
             // update position
